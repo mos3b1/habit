@@ -19,6 +19,19 @@
 
 # production
 /build
+.env*.local
+.env.local
+.env.development.local
+.env.development
+.env.production.local
+.env.production
+.env.test.local
+.env.test
+.env.staging.local
+.env.staging
+.env.preview.local
+.env.preview
+
 
 # misc
 .DS_Store
