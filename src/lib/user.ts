@@ -5,67 +5,94 @@ import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
-/**
- * GET OR CREATE USER
- * 
- * This is our simple solution instead of webhooks!
- * 
- * How it works:
- * 1. Get current user from Clerk
- * 2. Check if user exists in our database
- * 3. If NO → Create them
- * 4. If YES → Return existing user
- * 
- * Call this on any protected page to ensure user exists in DB.
- */
 export async function getOrCreateUser() {
-  // Step 1: Get user from Clerk
-  const clerkUser = await currentUser();
-  
-  // Not logged in
-  if (!clerkUser) {
-    return null;
-  }
+  try {
+    // Step 1: Get user from Clerk
+    const clerkUser = await currentUser();
+    
+    if (!clerkUser) {
+      console.log("❌ No Clerk user found");
+      return null;
+    }
 
-  // Step 2: Check if user exists in our database
-  const existingUser = await db.query.users.findFirst({
-    where: eq(users.clerkId, clerkUser.id),
-  });
+    console.log("🔍 Looking for user with clerkId:", clerkUser.id);
 
-  // Step 3: If exists, return them
-  if (existingUser) {
-    return existingUser;
-  }
+    // Step 2: Check if user exists
+    let existingUser;
+    try {
+      existingUser = await db.query.users.findFirst({
+        where: eq(users.clerkId, clerkUser.id),
+      });
+      console.log("🔍 Existing user query result:", existingUser);
+    } catch (queryError) {
+      console.error("❌ Error querying for existing user:", queryError);
+      throw queryError;
+    }
 
-  // Step 4: If not, create them
-  const email = clerkUser.emailAddresses[0]?.emailAddress;
-  
-  if (!email) {
-    throw new Error("User has no email address");
-  }
+    // Step 3: If exists, return
+    if (existingUser) {
+      console.log("✅ User already exists:", existingUser.email);
+      return existingUser;
+    }
 
-  const [newUser] = await db
-    .insert(users)
-    .values({
+    // Step 4: Create new user
+    console.log("📝 Creating new user...");
+    
+    const email = clerkUser.emailAddresses[0]?.emailAddress;
+    console.log("📧 Email:", email);
+    
+    if (!email) {
+      throw new Error("User has no email address");
+    }
+
+    const userData = {
       clerkId: clerkUser.id,
       email: email,
       name: `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim() || null,
       imageUrl: clerkUser.imageUrl || null,
       timezone: "UTC",
-    })
-    .returning();
+    };
+    
+    console.log("📝 User data to insert:", userData);
 
-  console.log("✅ New user created:", email);
-  
-  return newUser;
+    try {
+      const [newUser] = await db
+        .insert(users)
+        .values(userData)
+        .returning();
+
+      console.log("✅ New user created:", newUser);
+      return newUser;
+      
+    } catch (insertError: any) {
+      // Log the REAL error
+      console.error("❌ INSERT ERROR:", insertError);
+      console.error("❌ Error message:", insertError.message);
+      console.error("❌ Error cause:", insertError.cause);
+      
+      // If it's a duplicate key error, try to find the existing user
+      if (insertError.message?.includes("duplicate") || 
+          insertError.message?.includes("unique") ||
+          insertError.cause?.message?.includes("duplicate")) {
+        console.log("🔄 Duplicate detected, fetching existing user...");
+        const existingUser = await db.query.users.findFirst({
+          where: eq(users.email, email),
+        });
+        if (existingUser) {
+          return existingUser;
+        }
+      }
+      
+      throw insertError;
+    }
+
+  } catch (error: any) {
+    console.error("❌ getOrCreateUser failed:", error);
+    console.error("❌ Full error:", JSON.stringify(error, null, 2));
+    throw error;
+  }
 }
 
-/**
- * GET USER WITH HABITS
- * 
- * Same as above, but also fetches user's habits.
- * Useful for dashboard pages.
- */
 export async function getUserWithHabits() {
   const clerkUser = await currentUser();
   

@@ -76,71 +76,21 @@ export const categoryEnum = pgEnum('category', [
  * - Don't depend on external service for basic queries
  */
 export const users = pgTable('users', {
-  /**
-   * Primary Key: id
-   * 
-   * Using UUID instead of auto-incrementing integer because:
-   * - Can generate IDs without database (useful for offline/distributed)
-   * - Harder to guess (security)
-   * - No conflicts when merging databases
-   * 
-   * defaultRandom() = database generates UUID automatically
-   */
+  // UUID with default random value
   id: uuid('id').primaryKey().defaultRandom(),
-
-  /**
-   * Clerk ID
-   * 
-   * Clerk (our auth provider) has its own user IDs.
-   * We store it here to link Clerk user → our user.
-   * 
-   * .unique() = no two rows can have same clerkId
-   * .notNull() = this field is required
-   */
+  
+  // Required fields - NOT NULL, UNIQUE
   clerkId: text('clerk_id').unique().notNull(),
-
-  /**
-   * User's email
-   * 
-   * Even though Clerk stores this, we keep a copy for:
-   * - Quick access without calling Clerk API
-   * - Email-based queries
-   */
   email: text('email').unique().notNull(),
-
-  /**
-   * User's display name
-   * Can be null - user might not have set one yet
-   */
+  
+  // Optional fields - can be NULL
   name: text('name'),
-
-  /**
-   * Profile image URL
-   * Usually from OAuth provider (Google, GitHub, etc.)
-   */
   imageUrl: text('image_url'),
-
-  /**
-   * Timezone
-   * 
-   * CRITICAL for a habit tracker!
-   * "Did you exercise today?" depends on what "today" means
-   * for the user. Someone in Tokyo and New York have different "todays"
-   * 
-   * Default to UTC - we'll update when we know user's timezone
-   */
+  
+  // Has default value
   timezone: text('timezone').default('UTC').notNull(),
-
-  /**
-   * Timestamps
-   * 
-   * Always include these! They help with:
-   * - Debugging ("when was this created?")
-   * - Analytics ("how many users joined this month?")
-   * - Legal (audit trails)
-   * 
-   * defaultNow() = database sets to current time on insert
-   */
+  
+  // Timestamps with defaults
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

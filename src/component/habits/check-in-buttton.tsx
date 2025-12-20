@@ -23,7 +23,7 @@ type CheckInButtonProps = {
  */
 export function CheckInButton({ 
   habitId, 
-  date, 
+  date,
   isCompleted: initialCompleted,
   color 
 }: CheckInButtonProps) {

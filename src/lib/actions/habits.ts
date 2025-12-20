@@ -16,7 +16,7 @@ import { getOrCreateUser } from "@/lib/user";
 import { eq, and, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
+import { calculateCurrentStreak, calculateLongestStreak } from "@/lib/utils/streak";
 
 import { getTodayDate } from "@/lib/utils/date";
 
@@ -31,19 +31,15 @@ import { getTodayDate } from "@/lib/utils/date";
  * Makes it easy to show success/error messages in UI.
  */
 type ActionResponse = {
-  success: boolean;
-  message: string;
-  errors?: Record<string, string[]>;  // Field-specific errors
+  success: boolean;//if true action was successful
+  message: string;//user-friendly message
+  errors?: Record<string, string[]>; //is can be string or array of strings
 };
 
-/**
- * Habit Form Data
- * 
- * What we expect from the create/edit form
- */
+//this is the shape of data we expect from habit forms
 type HabitFormData = {
   name: string;
-  description?: string;
+  description?: string;//optional
   category: "health" | "productivity" | "mindfulness" | "fitness" | "learning" | "other";
   frequency: "daily" | "weekly";
   targetFrequency: number;
@@ -98,6 +94,8 @@ function validateHabit(data: HabitFormData): Record<string, string[]> {
  * @param formData - Form data from the habit form
  * @returns ActionResponse with success/error info
  */
+
+
 export async function createHabit(formData: FormData): Promise<ActionResponse> {
   try {
     // Step 1: Get current user
@@ -110,7 +108,8 @@ export async function createHabit(formData: FormData): Promise<ActionResponse> {
       };
     }
 
-    // Step 2: Extract form data
+    //you get the form data from the form submission
+    // Step 2: Extract data from form
     const data: HabitFormData = {
       name: formData.get("name") as string,
       description: formData.get("description") as string || undefined,
@@ -463,6 +462,84 @@ export async function toggleHabitActive(habitId: string): Promise<ActionResponse
  * - If not completed → mark as completed
  * - If completed → mark as not completed (undo)
  */
+// export async function toggleHabitCompletion(
+//   habitId: string,
+//   date: string = getTodayDate()
+// ): Promise<ActionResponse> {
+//   try {
+//     const user = await getOrCreateUser();
+    
+//     if (!user) {
+//       return { success: false, message: "You must be logged in" };
+//     }
+
+//     // get habits of cuurent user
+//     const habit = await db.query.habits.findFirst({//get the just first habit
+//       where: and(
+//         eq(habits.id, habitId),//get specific habit
+//         eq(habits.userId, user.id)//get user
+//       ),
+//     });
+
+//     if (!habit) {
+//       return { success: false, message: "Habit not found" };
+//     }
+
+//     // Check if log exists for this date
+//     const existingLog = await db.query.habitLogs.findFirst({//get the firt log
+//       where: and(
+//         eq(habitLogs.habitId, habitId),//het logs belong for the habit
+//         eq(habitLogs.date, date)//get the log of this day
+//       ),
+//     });
+
+//     if (existingLog) {
+//       // Toggle: if completed, uncomplete; if not completed, complete
+//       await db
+//         .update(habitLogs)//habitlog table
+//         .set({
+//           completed: !existingLog.completed,//reverse
+//           completedCount: existingLog.completed ? 0 : 1,
+//           updatedAt: new Date(),
+//         })
+//         .where(eq(habitLogs.id, existingLog.id));
+
+//       revalidatePath("/dashboard");
+      
+//       return {
+//         success: true,
+//         message: existingLog.completed ? "Habit unchecked" : "Habit completed! 🎉",
+//       };
+//     } else {
+//       // Create new log entry
+//       await db.insert(habitLogs).values({
+//         habitId,
+//         date,
+//         completed: true,
+//         completedCount: 1,
+//       });
+
+//       revalidatePath("/dashboard");
+      
+//       return {
+//         success: true,
+//         message: "Habit completed! 🎉",
+//       };
+//     }
+
+//   } catch (error) {
+//     console.error("Error toggling habit:", error);
+//     return { success: false, message: "Something went wrong" };
+//   }
+// }
+
+//update version of function toggleHabitCompletion
+
+/**
+ * Toggle habit completion for a specific date
+ * 
+ * UPDATED: Now also updates streak after toggle!
+ */
 export async function toggleHabitCompletion(
   habitId: string,
   date: string = getTodayDate()
@@ -494,47 +571,49 @@ export async function toggleHabitCompletion(
       ),
     });
 
+    let isNowCompleted: boolean;
+
     if (existingLog) {
       // Toggle: if completed, uncomplete; if not completed, complete
+      isNowCompleted = !existingLog.completed;
+      
       await db
         .update(habitLogs)
         .set({
-          completed: !existingLog.completed,
-          completedCount: existingLog.completed ? 0 : 1,
+          completed: isNowCompleted,
+          completedCount: isNowCompleted ? 1 : 0,
           updatedAt: new Date(),
         })
         .where(eq(habitLogs.id, existingLog.id));
-
-      revalidatePath("/dashboard");
-      
-      return {
-        success: true,
-        message: existingLog.completed ? "Habit unchecked" : "Habit completed! 🎉",
-      };
     } else {
-      // Create new log entry
+      // Create new log entry (completed)
+      isNowCompleted = true;
+      
       await db.insert(habitLogs).values({
         habitId,
         date,
         completed: true,
         completedCount: 1,
       });
-
-      revalidatePath("/dashboard");
-      
-      return {
-        success: true,
-        message: "Habit completed! 🎉",
-      };
     }
+
+    // ✨ UPDATE STREAK AFTER TOGGLE
+    await updateHabitStreak(habitId);
+
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/habits");
+    revalidatePath(`/dashboard/habits/${habitId}`);
+    
+    return {
+      success: true,
+      message: isNowCompleted ? "Habit completed! 🎉" : "Habit unchecked",
+    };
 
   } catch (error) {
     console.error("Error toggling habit:", error);
     return { success: false, message: "Something went wrong" };
   }
 }
-
-
 
 
 
@@ -550,7 +629,7 @@ export async function getHabitsWithStatus(date: string = getTodayDate()) {
   }
 
   // Get all active habits
-  const userHabits = await db.query.habits.findMany({
+  const userHabits = await db.query.habits.findMany({//find all habits
     where: and(
       eq(habits.userId, user.id),
       eq(habits.isActive, true)
@@ -559,7 +638,7 @@ export async function getHabitsWithStatus(date: string = getTodayDate()) {
   });
 
   // Get logs for the specified date
-  const logs = await db.query.habitLogs.findMany({
+  const logs = await db.query.habitLogs.findMany({//get all logs
     where: and(
       eq(habitLogs.date, date),
       // Only get logs for user's habits
@@ -568,12 +647,12 @@ export async function getHabitsWithStatus(date: string = getTodayDate()) {
   });
 
   // Create a map of habitId -> log for quick lookup
-  const logMap = new Map(logs.map(log => [log.habitId, log]));
+  const logMap = new Map(logs.map(log => [log.habitId, log]));//is gona look like
 
   // Combine habits with their status
   const habitsWithStatus = userHabits.map(habit => ({
     ...habit,
-    isCompletedToday: logMap.get(habit.id)?.completed || false,
+    isCompletedToday: logMap.get(habit.id)?.completed || false,//tha map of logs
     todayLog: logMap.get(habit.id) || null,
   }));
 
@@ -604,7 +683,7 @@ export async function getCompletionStats(startDate: string, endDate: string) {
     ),
   });
 
-  const habitIds = userHabits.map(h => h.id);
+  const habitIds = userHabits.map(h => h.id);//is gonna store like array inside habitsIds
   
   if (habitIds.length === 0) {
     return { total: 0, completed: 0, percentage: 0 };
@@ -621,20 +700,21 @@ export async function getCompletionStats(startDate: string, endDate: string) {
   // Filter logs for user's habits and date range
   const relevantLogs = logs.filter(
     log => 
-      habitIds.includes(log.habitId) && 
-      log.date >= startDate && 
+      habitIds.includes(log.habitId) && //specifiq id
+      log.date >= startDate && //specific date
       log.date <= endDate
   );
 
   const completed = relevantLogs.length;
-  // For daily habits, total = habits × days in range
+
+  // this calculate the number of days in this range
   const daysDiff = Math.ceil(
     (new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24)
   ) + 1;
   const total = habitIds.length * daysDiff;
   const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
 
-  return { total, completed, percentage };
+  return { total, completed, percentage };//is retun number of active habit in this range,retunr the number of complete logs,return average
 }
 
 
@@ -706,4 +786,143 @@ export async function addNoteToLog(
 
 
 
+// ============================================================
+// STREAK UPDATE FUNCTIONS
+// ============================================================
+
+/**
+ * Recalculate and update streak for a specific habit
+ * 
+ * Called after any check-in to ensure streaks are accurate.
+ */
+async function updateHabitStreak(habitId: string): Promise<void> {
+  // Get all logs for this habit
+  const logs = await db.query.habitLogs.findMany({
+    where: eq(habitLogs.habitId, habitId),
+    orderBy: [desc(habitLogs.date)],
+  });
+
+  // Calculate streaks
+  const currentStreak = calculateCurrentStreak(logs);
+  const longestStreak = calculateLongestStreak(logs);
+
+  // Get current habit to compare longest streak
+  const habit = await db.query.habits.findFirst({
+    where: eq(habits.id, habitId),
+  });
+
+  // Only update longest streak if new one is higher
+  const newLongestStreak = Math.max(
+    longestStreak,
+    habit?.longestStreak || 0
+  );
+
+  // Update habit with new streak values
+  await db
+    .update(habits)
+    .set({
+      currentStreak,
+      longestStreak: newLongestStreak,
+      updatedAt: new Date(),
+    })
+    .where(eq(habits.id, habitId));
+}
+
+
+
+/**
+ * Recalculate streaks for ALL user's habits
+ * 
+ * Useful for:
+ * - Daily cron job to update streaks at midnight
+ * - Fixing any streak inconsistencies
+ * - After importing data
+ */
+export async function recalculateAllStreaks(): Promise<ActionResponse> {
+  try {
+    const user = await getOrCreateUser();
+    
+    if (!user) {
+      return { success: false, message: "You must be logged in" };
+    }
+
+    // Get all user's habits
+    const userHabits = await db.query.habits.findMany({
+      where: eq(habits.userId, user.id),
+    });
+
+    // Update each habit's streak
+    for (const habit of userHabits) {
+      await updateHabitStreak(habit.id);
+    }
+
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/habits");
+
+    return { 
+      success: true, 
+      message: `Updated streaks for ${userHabits.length} habits` 
+    };
+
+  } catch (error) {
+    console.error("Error recalculating streaks:", error);
+    return { success: false, message: "Something went wrong" };
+  }
+}
+
+
+
+
+
+
+// ============================================================
+// GET HABIT WITH STREAK DETAILS
+// ============================================================
+
+/**
+ * Get detailed streak information for a habit
+ */
+export async function getHabitStreakDetails(habitId: string) {
+  const user = await getOrCreateUser();
+  
+  if (!user) {
+    return null;
+  }
+
+  // Get habit with all logs
+  const habit = await db.query.habits.findFirst({
+    where: and(
+      eq(habits.id, habitId),
+      eq(habits.userId, user.id)
+    ),
+    with: {
+      logs: {
+        orderBy: (logs, { desc }) => [desc(logs.date)],
+      },
+    },
+  });
+
+  if (!habit) return null;
+
+  // Calculate fresh streak stats
+  const currentStreak = calculateCurrentStreak(habit.logs);
+  const longestStreak = calculateLongestStreak(habit.logs);
+  const totalCompletions = habit.logs.filter(l => l.completed).length;
+  
+  // Get today's status
+  const today = getTodayDate();
+  const todayLog = habit.logs.find(l => l.date === today);
+  const isCompletedToday = todayLog?.completed || false;
+
+  return {
+    ...habit,
+    currentStreak,
+    longestStreak,
+    totalCompletions,
+    isCompletedToday,
+    completionRate: habit.logs.length > 0 
+      ? Math.round((totalCompletions / habit.logs.length) * 100)
+      : 0,
+  };
+}
 

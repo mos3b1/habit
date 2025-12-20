@@ -55,6 +55,7 @@ export default async function EditHabitPage({ params }: Props) {
         </p>
 
         <HabitForm habit={habit} action={handleUpdate} />
+        {/* we send habit and handleUpdate as action  */}
       </div>
     </div>
   );

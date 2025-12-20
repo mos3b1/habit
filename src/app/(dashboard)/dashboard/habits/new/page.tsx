@@ -44,6 +44,7 @@ export default function NewHabitPage() {
         </p>
 
         <HabitForm action={handleCreate} />
+        {/* we send handleCreate as action to habit form and no habit because is new and no on succes */}
       </div>
     </div>
   );

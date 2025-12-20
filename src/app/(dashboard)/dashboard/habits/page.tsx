@@ -13,7 +13,7 @@ import { HabitCard } from "@/component/habits/habit-card";
  * - Filter by category (future improvement)
  */
 export default async function HabitsPage() {
-  const habits = await getHabits();
+  const habits = await getHabits();//fetch all habits for the user
 
   return (
     <div className="space-y-6">

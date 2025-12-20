@@ -18,9 +18,16 @@ import type { Habit } from "@/lib/db/schema";
 // ============================================================
 
 type HabitFormProps = {
-  habit?: Habit;  // If provided, we're editing
-  action: (formData: FormData) => Promise<{ success: boolean; message: string; errors?: Record<string, string[]> }>;
-  onSuccess?: () => void;
+  habit?: Habit; // type from DB schema
+  //action is function that takes formData and returns ActionResponse
+  action: (
+    formData: FormData
+  ) => Promise<{
+    success: boolean;
+    message: string;
+    errors?: Record<string, string[]>;
+  }>;
+  onSuccess?: () => void;//callback on successful submission can be function or undefined
 };
 
 // ============================================================
@@ -66,12 +73,12 @@ const ICONS = ["💪", "🏃", "📚", "🧘", "💧", "🥗", "😴", "✍️",
 
 /**
  * Submit Button Component
- * 
+ *
  * useFormStatus gives us pending state automatically!
  * No need to manage loading state manually.
  */
 function SubmitButton({ isEditing }: { isEditing: boolean }) {
-  const { pending } = useFormStatus();
+  const { pending } = useFormStatus();//true if form is being submitted
 
   return (
     <button
@@ -113,23 +120,22 @@ function SubmitButton({ isEditing }: { isEditing: boolean }) {
 // ============================================================
 
 export function HabitForm({ habit, action, onSuccess }: HabitFormProps) {
-  const isEditing = !!habit;
-  
+  const isEditing = !!habit; //are we editing an existing habit?
+
   // Form state
   const [selectedColor, setSelectedColor] = useState(habit?.color || COLORS[0]);
   const [selectedIcon, setSelectedIcon] = useState(habit?.icon || "");
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [message, setMessage] = useState("");
 
-  /**
-   * Handle form submission
-   * 
-   * We wrap the action to handle the response
-   */
+
+  //this formData is automatically provided by the browser when the form is submitted
   async function handleSubmit(formData: FormData) {
     // Add color and icon to form data
-    formData.set("color", selectedColor);
-    formData.set("icon", selectedIcon);
+    formData.set("color", selectedColor);//add selected color to form data
+    formData.set("icon", selectedIcon);//add selected icon to form data
+
+    // Call the provided action like createHabit or updateHabit
 
     const result = await action(formData);
 
@@ -160,13 +166,16 @@ export function HabitForm({ habit, action, onSuccess }: HabitFormProps) {
 
       {/* Habit Name */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
           Habit Name *
         </label>
         <input
           type="text"
           id="name"
-          name="name"
+          name="name"//this mean is automatically included in formData
           defaultValue={habit?.name || ""}
           placeholder="e.g., Morning Run, Read 30 minutes"
           className={`w-full px-4 py-3 rounded-xl border ${
@@ -181,12 +190,15 @@ export function HabitForm({ habit, action, onSuccess }: HabitFormProps) {
 
       {/* Description */}
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="description"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
           Description (optional)
         </label>
         <textarea
           id="description"
-          name="description"
+          name="description"//this mean is automatically included in formData
           defaultValue={habit?.description || ""}
           placeholder="Add details about your habit..."
           rows={3}
@@ -201,20 +213,22 @@ export function HabitForm({ habit, action, onSuccess }: HabitFormProps) {
         </label>
         <div className="grid grid-cols-3 gap-2">
           {CATEGORIES.map((category) => (
-            <label
-              key={category.value}
-              className="cursor-pointer"
-            >
+            <label key={category.value} className="cursor-pointer">
               <input
                 type="radio"
-                name="category"
+                name="category"//this mean is automatically included in formData
                 value={category.value}
-                defaultChecked={habit?.category === category.value || category.value === "other"}
+                defaultChecked={
+                  habit?.category === category.value ||
+                  category.value === "other"
+                }
                 className="sr-only peer"
               />
-              <div className="p-3 rounded-xl border border-gray-200 text-center 
+              <div
+                className="p-3 rounded-xl border border-gray-200 text-center 
                             peer-checked:border-indigo-500 peer-checked:bg-indigo-50
-                            hover:bg-gray-50 transition-colors">
+                            hover:bg-gray-50 transition-colors"
+              >
                 <span className="text-xl">{category.emoji}</span>
                 <p className="text-sm mt-1">{category.label}</p>
               </div>
@@ -232,14 +246,16 @@ export function HabitForm({ habit, action, onSuccess }: HabitFormProps) {
           <label className="cursor-pointer">
             <input
               type="radio"
-              name="frequency"
+              name="frequency"//this mean is automatically included in formData
               value="daily"
               defaultChecked={habit?.frequency !== "weekly"}
               className="sr-only peer"
             />
-            <div className="p-4 rounded-xl border border-gray-200 text-center
+            <div
+              className="p-4 rounded-xl border border-gray-200 text-center
                           peer-checked:border-indigo-500 peer-checked:bg-indigo-50
-                          hover:bg-gray-50 transition-colors">
+                          hover:bg-gray-50 transition-colors"
+            >
               <span className="text-2xl">📅</span>
               <p className="font-medium mt-1">Daily</p>
               <p className="text-sm text-gray-500">Every day</p>
@@ -248,14 +264,16 @@ export function HabitForm({ habit, action, onSuccess }: HabitFormProps) {
           <label className="cursor-pointer">
             <input
               type="radio"
-              name="frequency"
+              name="frequency"//this mean is automatically included in formData
               value="weekly"
               defaultChecked={habit?.frequency === "weekly"}
               className="sr-only peer"
             />
-            <div className="p-4 rounded-xl border border-gray-200 text-center
+            <div
+              className="p-4 rounded-xl border border-gray-200 text-center
                           peer-checked:border-indigo-500 peer-checked:bg-indigo-50
-                          hover:bg-gray-50 transition-colors">
+                          hover:bg-gray-50 transition-colors"
+            >
               <span className="text-2xl">📆</span>
               <p className="font-medium mt-1">Weekly</p>
               <p className="text-sm text-gray-500">Times per week</p>
@@ -266,7 +284,10 @@ export function HabitForm({ habit, action, onSuccess }: HabitFormProps) {
 
       {/* Target Frequency */}
       <div>
-        <label htmlFor="targetFrequency" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="targetFrequency"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
           Target (times per day/week)
         </label>
         <input
@@ -292,7 +313,9 @@ export function HabitForm({ habit, action, onSuccess }: HabitFormProps) {
               type="button"
               onClick={() => setSelectedColor(color)}
               className={`w-10 h-10 rounded-xl transition-transform ${
-                selectedColor === color ? "ring-2 ring-offset-2 ring-indigo-500 scale-110" : ""
+                selectedColor === color
+                  ? "ring-2 ring-offset-2 ring-indigo-500 scale-110"
+                  : ""
               }`}
               style={{ backgroundColor: color }}
             />
