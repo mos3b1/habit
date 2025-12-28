@@ -1,4 +1,4 @@
-// src/components/habits/habit-card.tsx
+// src/components/habits/habit-card.tsx (THEMED VERSION)
 
 import Link from "next/link";
 import type { Habit } from "@/lib/db/schema";
@@ -9,17 +9,17 @@ type HabitCardProps = {
 };
 
 /**
- * Habit Card Component
+ * Habit Card Component - Fully themed for light/dark mode
  * 
- * Displays a single habit with:
- * - Icon and name
- * - Category badge
- * - Streak info
- * - Quick actions (edit, delete)
+ * Uses CSS variables:
+ * - bg-card for card background
+ * - text-foreground for main text
+ * - text-muted-foreground for secondary text
+ * - border-border for borders
  */
 export function HabitCard({ habit }: HabitCardProps) {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-shadow">
       <div className="p-5">
         {/* Top Row: Icon, Name, Actions */}
         <div className="flex items-start justify-between">
@@ -34,8 +34,8 @@ export function HabitCard({ habit }: HabitCardProps) {
             
             {/* Habit Info */}
             <div>
-              <h3 className="font-semibold text-gray-900">{habit.name}</h3>
-              <p className="text-sm text-gray-500">
+              <h3 className="font-semibold text-foreground">{habit.name}</h3>
+              <p className="text-sm text-muted-foreground">
                 {habit.frequency === "daily" ? "Daily" : `${habit.targetFrequency}x per week`}
               </p>
             </div>
@@ -45,7 +45,7 @@ export function HabitCard({ habit }: HabitCardProps) {
           <div className="flex items-center gap-2">
             <Link
               href={`/dashboard/habits/${habit.id}/edit`}
-              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
               title="Edit habit"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,10 +57,15 @@ export function HabitCard({ habit }: HabitCardProps) {
         </div>
 
         {/* Description */}
-        {habit.description && (
-          <p className="mt-3 text-sm text-gray-600 line-clamp-2">
+        {habit.description ? (
+          <p className="mt-3 text-sm text-muted-foreground line-clamp-2">
             {habit.description}
           </p>
+        ):(
+          <p className="mt-3 text-sm text-muted-foreground line-clamp-2">
+            No Description ..
+          </p>
+
         )}
 
         {/* Stats Row */}
@@ -77,13 +82,13 @@ export function HabitCard({ habit }: HabitCardProps) {
           </span>
 
           {/* Current Streak */}
-          <div className="flex items-center gap-1 text-gray-500">
+          <div className="flex items-center gap-1 text-muted-foreground">
             <span>🔥</span>
             <span>{habit.currentStreak} day streak</span>
           </div>
 
           {/* Best Streak */}
-          <div className="flex items-center gap-1 text-gray-500">
+          <div className="flex items-center gap-1 text-muted-foreground">
             <span>🏆</span>
             <span>Best: {habit.longestStreak}</span>
           </div>
@@ -93,7 +98,7 @@ export function HabitCard({ habit }: HabitCardProps) {
       {/* Bottom Action */}
       <Link
         href={`/dashboard/habits/${habit.id}`}
-        className="block px-5 py-3 bg-gray-50 rounded-b-xl text-center text-sm text-indigo-600 font-medium hover:bg-gray-100 transition-colors"
+        className="block px-5 py-3 bg-muted/30 rounded-b-xl text-center text-sm text-primary font-medium hover:bg-muted/50 transition-colors"
       >
         View Details →
       </Link>

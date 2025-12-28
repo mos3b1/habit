@@ -1,4 +1,3 @@
-// src/components/habits/streak-display.tsx
 
 "use client";
 
@@ -12,15 +11,6 @@ type StreakDisplayProps = {
   size?: "sm" | "md" | "lg";
 };
 
-/**
- * Streak Display Component
- * 
- * Shows current streak with:
- * - Fire emoji animation
- * - Streak count
- * - Status label
- * - Optional motivational message
- */
 export function StreakDisplay({
   currentStreak,
   longestStreak,
@@ -56,41 +46,37 @@ export function StreakDisplay({
 
   return (
     <div className="space-y-3">
-      <div className={`flex items-center gap-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-xl ${classes.container}`}>
-        {/* Fire Icon with Animation */}
+      <div className={`flex items-center gap-4 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950/30 dark:to-red-950/30 rounded-xl ${classes.container} border border-orange-100 dark:border-orange-900`}>
         <div className={`${classes.icon} ${currentStreak > 0 ? "animate-pulse" : ""}`}>
           {status.emoji}
         </div>
 
-        {/* Streak Info */}
         <div className="flex-1">
           <div className="flex items-baseline gap-2">
-            <span className={`font-bold text-gray-900 ${classes.number}`}>
+            <span className={`font-bold text-foreground ${classes.number}`}>
               {currentStreak}
             </span>
-            <span className={`text-gray-500 ${classes.label}`}>
+            <span className={`text-muted-foreground ${classes.label}`}>
               day{currentStreak !== 1 ? "s" : ""} streak
             </span>
           </div>
-          <p className={`text-gray-600 ${classes.label}`}>
+          <p className={`text-muted-foreground ${classes.label}`}>
             {status.label}
           </p>
         </div>
 
-        {/* Best Streak Badge */}
         {longestStreak > 0 && (
-          <div className="text-center bg-white/50 rounded-lg px-3 py-2">
-            <p className="text-xs text-gray-500">Best</p>
-            <p className="font-bold text-purple-600">
+          <div className="text-center bg-card rounded-lg px-3 py-2 border border-border">
+            <p className="text-xs text-muted-foreground">Best</p>
+            <p className="font-bold text-purple-600 dark:text-purple-400">
               🏆 {longestStreak}
             </p>
           </div>
         )}
       </div>
 
-      {/* Motivational Message */}
       {showMessage && (
-        <p className={`text-center text-gray-600 ${classes.label}`}>
+        <p className={`text-center text-muted-foreground ${classes.label}`}>
           {message}
         </p>
       )}
@@ -98,11 +84,6 @@ export function StreakDisplay({
   );
 }
 
-/**
- * Compact Streak Badge
- * 
- * Smaller version for cards and lists
- */
 export function StreakBadge({ 
   streak, 
   showZero = false 
@@ -119,8 +100,8 @@ export function StreakBadge({
       className={`
         inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium
         ${streak === 0 
-          ? "bg-gray-100 text-gray-500" 
-          : "bg-orange-100 text-orange-700"
+          ? "bg-muted text-muted-foreground" 
+          : "bg-orange-100 dark:bg-orange-950/40 text-orange-700 dark:text-orange-300"
         }
       `}
     >
@@ -130,11 +111,6 @@ export function StreakBadge({
   );
 }
 
-/**
- * Streak Progress Ring
- * 
- * Circular progress towards a goal (e.g., 30-day challenge)
- */
 export function StreakProgressRing({
   current,
   goal = 30,
@@ -154,17 +130,16 @@ export function StreakProgressRing({
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
-      {/* Background Circle */}
       <svg className="transform -rotate-90" width={size} height={size}>
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="#e5e7eb"
+          stroke="currentColor"
           strokeWidth={strokeWidth}
           fill="none"
+          className="text-muted"
         />
-        {/* Progress Circle */}
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -179,11 +154,10 @@ export function StreakProgressRing({
         />
       </svg>
 
-      {/* Center Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-2xl">{status.emoji}</span>
-        <span className="font-bold text-gray-900">{current}</span>
-        <span className="text-xs text-gray-500">/ {goal}</span>
+        <span className="font-bold text-foreground">{current}</span>
+        <span className="text-xs text-muted-foreground">/ {goal}</span>
       </div>
     </div>
   );

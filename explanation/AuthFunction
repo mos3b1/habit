@@ -1,0 +1,41 @@
+Auth & user sync
+2.1 getOrCreateUser() (server function)<-----
+Goal: ensure there is a row in your users table for the currently logged in Clerk user.
+-----
+Inputs
+No direct args.
+Internally reads Clerk session via currentUser().
+-----
+Output
+Returns a DB user object or null:
+-------
+
+{
+  id: string,
+  clerkId: string,
+  email: string,
+  plan: "free" | "pro",
+  stripeCustomerId?: string | null,
+  ...
+} | null
+------
+Logic (in human terms)
+Ask Clerk: “who is logged in?”
+If nobody: return null
+Find in DB by clerkId
+If found: return it
+If not found:
+create a new DB user row using clerk data
+return the inserted row
+-------
+Where it’s used in UI
+In most server pages before fetching user data:
+/dashboard/page.tsx
+/dashboard/habits/...
+/dashboard/upgrade
+/dashboard/billing
+Stripe checkout/verify routes
+--------
+Why it matters
+Everything else (habits/logs/payments) needs your internal users.id.
+

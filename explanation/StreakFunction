@@ -1,0 +1,66 @@
+5) Streak calculation (why it works reliably)
+Streaks are based on habit_logs, but stored in habits for fast display.(longstreak and curentstreak)
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+5.1 calculateCurrentStreak(logs)
+Goal: compute -->consecutive<--- completed days ending today (or yesterday if today not done).
+
+Input
+logs: { date: string; completed: boolean }[]
+
+Output
+number (current streak)
+
+Core logic
+Build set of completed dates
+Start from today:
+if today isn’t completed → start from yesterday
+Count backwards day-by-day until a day is missing or incomplete
+
+UI impact
+Shows “your streak is still alive” in the morning before today’s check-in.
+
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+5.2 calculateLongestStreak(logs)
+Goal: compute -->max chain<-- of consecutive completed dates.
+
+Input
+same logs array
+
+Output
+number (longest streak ever)
+
+Core logic
+Extract completed dates, sort them
+Count consecutive sequences
+Keep maximum
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+5.3 updateHabitStreak(habitId)
+Goal: sync cached streak fields in habits table.
+
+Input
+habitId
+
+Output
+no return (updates DB)
+
+Logic
+Fetch all logs for habit
+current = calculateCurrentStreak(logs)
+longest = calculateLongestStreak(logs)
+
+Update habit:
+currentStreak = current
+longestStreak = max(longest, existingLongest) (don’t decrease record)
+Where it’s triggered
+Called inside -->toggleHabitCompletion()<-- every time user checks/unchecks for recalculate the streak.
+
+UI usage
+Any UI showing habit.currentStreak becomes correct after check-in:
+dashboard list
+habit detail
+streak highlights
+
+

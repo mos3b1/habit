@@ -7,6 +7,8 @@ import {HeroHeader} from "@/components/header";
 import HeroSection from "@/components/hero-section-one";
 import ContentSection from "@/components/content-four";
 import FooterSection from "@/components/footer-four";
+import Features from "@/components/features-2";
+import { getOrCreateUser } from "@/lib/user";
 /**
  * Landing Page
  * 
@@ -16,20 +18,25 @@ import FooterSection from "@/components/footer-four";
 export default async function HomePage() {
   // Check if user is already signed in
   const { userId } = await auth();
+  const user =await getOrCreateUser();
+
+  const isPro=user?.plan==="pro";
   
   if (userId) {
     redirect("/dashboard");
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-background">
    
       <HeroHeader />
 
       <HeroSection />
+      
+      <Features/>
 
 
-      <ContentSection />
+      
 
 
       <FooterSection />

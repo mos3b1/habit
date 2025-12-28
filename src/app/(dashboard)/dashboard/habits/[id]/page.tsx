@@ -139,7 +139,7 @@ export default async function HabitDetailPage({ params }: Props) {
 
       {/* Activity Calendar */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <h2 className="font-semibold text-gray-900 mb-4">Activity History</h2>
+        <h2 className="font-semibold text-gray-900 mb-4">Activity History of (30 days)</h2>
         <StreakCalendar logs={habit.logs} days={30} />
       </div>
 

@@ -1,4 +1,4 @@
-import { LogoIcon } from '@/components/logo'
+import { Logo } from '@/components/logo'
 import Link from 'next/link'
 
 const links = [
@@ -37,7 +37,7 @@ export default function FooterSection() {
                         <Link
                             href="#"
                             aria-label="go home">
-                            <LogoIcon />
+                            <Logo />
                         </Link>
                         <span className="text-muted-foreground block text-center text-sm">© {new Date().getFullYear()} Tailark Mist, All rights reserved</span>
                     </div>

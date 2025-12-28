@@ -1,0 +1,120 @@
+You have two types of server operations:
+
+READ: server functions returning data (called from server pages)
+WRITE: server actions that insert/update/delete
+
+
+:::::::::::::::::::::::::::::::::::::::::::
+
+3.1 getHabits()
+Goal: read all active habits for the current user.
+
+Input
+none (uses current user)
+
+Output
+Habit[] (array)
+
+Logic:
+getOrCreateUser()
+Select habits where:
+habits.userId = user.id
+habits.isActive = true
+Sort by newest
+
+UI usage
+/dashboard/habits/page.tsx shows list of habit cards.
+
+
+:::::::::::::::::::::::::::::::::::::::::::
+
+3.2 getHabitById(habitId)
+Goal: fetch one habit, but only if it belongs to current user.
+
+Input
+habitId: string
+
+Output
+Habit | null
+
+Logic
+Query habits where:
+habits.id = habitId
+habits.userId = currentUser.id
+
+If not found → null (prevents other users from accessing it)
+
+UI usage
+/dashboard/habits/[id]/edit/page.tsx loads habit into edit form.
+
+:::::::::::::::::::::::::::::::::::::::::::::::
+
+3.3 createHabit(formData)
+Goal: insert a new habit for the user.
+
+Input
+FormData from your habit form:
+name, category, frequency, targetFrequency, color, icon, description
+
+Output
+Action response:
+TypeScript
+
+{ success: boolean; message: string; errors?: Record<string,string[]> }
+
+Logic
+getOrCreateUser()
+If free plan:
+count active habits
+if >= 3 → return error (upgrade)
+Validate inputs
+Insert into habits
+Revalidate pages (revalidatePath)
+
+UI usage
+/dashboard/habits/new/page.tsx form submit.
+Habit form component calls server action and shows error/success
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+3.4 updateHabit(habitId, formData)
+Goal: edit an existing habit.
+
+Input
+habitId: string
+FormData
+
+Output
+same ActionResponse
+
+Logic
+getOrCreateUser()
+Confirm habit belongs to the user
+Validate
+Update row
+Revalidate
+
+UI usage
+/dashboard/habits/[id]/edit/page.tsx
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+3.5 deleteHabit(habitId) (soft delete)
+Goal: hide habit without losing history.
+
+Input
+habitId
+
+Output
+ActionResponse
+
+Logic
+Verify user + ownership
+Update habit: isActive=false
+Revalidate
+
+UI usage
+Delete button component on habit cards (shows confirm dialog then calls action)
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+

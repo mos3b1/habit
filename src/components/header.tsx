@@ -5,7 +5,9 @@ import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import React from 'react'
 import { cn } from '@/lib/utils'
-
+import logo from "../app/favicon.ico"
+import Image from 'next/image'
+import { ThemeToggle } from '@/component/theme-toggle'
 const menuItems = [
     { name: 'Features', href: '#link' },
     { name: 'Pricing', href: '#link' },
@@ -35,7 +37,13 @@ export const HeroHeader = () => {
                                 href="/"
                                 aria-label="home"
                                 className="flex items-center space-x-2">
-                                <Logo />
+                               <Image
+                                    src={logo}
+                                    alt="logo"
+                                    width={50}
+                                    height={50}
+                                />
+
                             </Link>
 
                             <button
@@ -81,6 +89,7 @@ export const HeroHeader = () => {
                                 </ul>
                             </div>
                             <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
+                                <ThemeToggle />
                                 <Button
                                     asChild
                                     variant="ghost"

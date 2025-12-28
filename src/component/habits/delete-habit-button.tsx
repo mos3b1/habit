@@ -1,25 +1,15 @@
-// src/components/habits/delete-habit-button.tsx
-
 "use client";
 
 import { useState } from "react";
 import { deleteHabit } from "@/lib/actions/habits";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type DeleteHabitButtonProps = {
   habitId: string;
   habitName: string;
 };
 
-/**
- * Delete Habit Button
- * 
- * Shows confirmation modal before deleting.
- * Why a modal instead of instant delete?
- * - Prevents accidental deletions
- * - Better UX
- * - Shows what's being deleted
- */
 export function DeleteHabitButton({ habitId, habitName }: DeleteHabitButtonProps) {
   const [showModal, setShowModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -31,10 +21,12 @@ export function DeleteHabitButton({ habitId, habitName }: DeleteHabitButtonProps
     const result = await deleteHabit(habitId);
     
     if (result.success) {
+     
+      toast.success(result.message);
       setShowModal(false);
       router.refresh();
     } else {
-      alert(result.message);
+      toast.error(result.message);
     }
     
     setIsDeleting(false);
@@ -42,10 +34,9 @@ export function DeleteHabitButton({ habitId, habitName }: DeleteHabitButtonProps
 
   return (
     <>
-      {/* Delete Button */}
       <button
         onClick={() => setShowModal(true)}
-        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+        className="p-2 text-muted-foreground hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors"
         title="Delete habit"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,21 +44,18 @@ export function DeleteHabitButton({ habitId, habitName }: DeleteHabitButtonProps
         </svg>
       </button>
 
-      {/* Confirmation Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Backdrop */}
           <div 
             className="absolute inset-0 bg-black/50"
             onClick={() => setShowModal(false)}
           />
           
-          {/* Modal */}
-          <div className="relative bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-xl">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          <div className="relative bg-card rounded-2xl p-6 max-w-md w-full mx-4 shadow-xl border border-border">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               Delete Habit?
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-muted-foreground mb-6">
               Are you sure you want to delete <strong>"{habitName}"</strong>? 
               This habit will be archived and can be restored later.
             </p>
@@ -75,14 +63,14 @@ export function DeleteHabitButton({ habitId, habitName }: DeleteHabitButtonProps
             <div className="flex gap-3">
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                className="flex-1 px-4 py-2 border border-border rounded-xl hover:bg-muted/50 transition-colors text-foreground"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors disabled:opacity-50"
+                className="flex-1 px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded-xl hover:bg-red-700 dark:hover:bg-red-600 transition-colors disabled:opacity-50"
               >
                 {isDeleting ? "Deleting..." : "Delete"}
               </button>

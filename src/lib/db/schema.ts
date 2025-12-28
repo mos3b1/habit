@@ -59,7 +59,13 @@ export const categoryEnum = pgEnum('category', [
   'learning',    // Reading, courses
   'other'        // Catch-all
 ]);
-
+// Add this enum at the top with other enums
+// export const subscriptionStatusEnum = pgEnum('subscription_status', [
+//   'free',
+//   'pro',
+//   'canceled',
+//   'past_due',
+// ]);
 // ============================================================
 // USERS TABLE
 // ============================================================
@@ -76,25 +82,32 @@ export const categoryEnum = pgEnum('category', [
  * - Don't depend on external service for basic queries
  */
 export const users = pgTable('users', {
-  // UUID with default random value
+  // ... your existing columns stay the same ...
   id: uuid('id').primaryKey().defaultRandom(),
-  
-  // Required fields - NOT NULL, UNIQUE
   clerkId: text('clerk_id').unique().notNull(),
   email: text('email').unique().notNull(),
-  
-  // Optional fields - can be NULL
   name: text('name'),
   imageUrl: text('image_url'),
-  
-  // Has default value
   timezone: text('timezone').default('UTC').notNull(),
   
-  // Timestamps with defaults
+  // ========================================
+  // ADD THESE NEW COLUMNS:
+  // ========================================
+  
+  // Is user on "free" or "pro" plan?
+  plan: text('plan').default('free').notNull(),
+  
+  // Stripe customer ID (for managing payments)
+  stripeCustomerId: text('stripe_customer_id'),
+  
+  // Stripe subscription ID
+  stripeSubscriptionId: text('stripe_subscription_id'),
+  
+  // ========================================
+  
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
-
 // ============================================================
 // HABITS TABLE
 // ============================================================

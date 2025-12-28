@@ -1,23 +1,15 @@
-// src/components/habits/week-overview.tsx
-
 import { getLastNDays, getDayName, isToday } from "@/lib/utils/date";
 
 type WeekOverviewProps = {
   completionData: Record<string, { completed: number; total: number }>;
 };
 
-/**
- * Week Overview
- * 
- * Shows a mini calendar of the last 7 days
- * with completion status for each day.
- */
 export function WeekOverview({ completionData }: WeekOverviewProps) {
   const last7Days = getLastNDays(7);
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-      <h3 className="font-semibold text-gray-900 mb-4">This Week</h3>
+    <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
+      <h3 className="font-semibold text-foreground mb-4">This Week</h3>
       
       <div className="grid grid-cols-7 gap-2">
         {last7Days.map((date) => {
@@ -31,23 +23,21 @@ export function WeekOverview({ completionData }: WeekOverviewProps) {
               key={date}
               className={`
                 flex flex-col items-center p-2 rounded-lg
-                ${isTodayDate ? "bg-indigo-50 ring-2 ring-indigo-200" : ""}
+                ${isTodayDate ? "bg-primary/10 ring-2 ring-primary/20" : ""}
               `}
             >
-              {/* Day name */}
-              <span className="text-xs text-gray-500 mb-1">
+              <span className="text-xs text-muted-foreground mb-1">
                 {getDayName(date)}
               </span>
               
-              {/* Status indicator */}
               <div
                 className={`
                   w-8 h-8 rounded-full flex items-center justify-center text-sm
                   ${isComplete 
-                    ? "bg-green-500 text-white" 
+                    ? "bg-green-500 dark:bg-green-400 text-white" 
                     : hasPartial
-                    ? "bg-yellow-100 text-yellow-700 border-2 border-yellow-300"
-                    : "bg-gray-100 text-gray-400"
+                    ? "bg-yellow-100 dark:bg-yellow-950/40 text-yellow-700 dark:text-yellow-300 border-2 border-yellow-300 dark:border-yellow-800"
+                    : "bg-muted text-muted-foreground"
                   }
                 `}
               >

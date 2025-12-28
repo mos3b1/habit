@@ -28,7 +28,7 @@ export function TodayHabits({ habits, date }: TodayHabitsProps) {
   // Empty state
   if (habits.length === 0) {
     return (
-      <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center">
+      <div className="bg-card rounded-2xl p-8 shadow-sm border border-gray-100 text-center">
         <div className="text-6xl mb-4">🌱</div>
         <h2 className="text-xl font-semibold text-gray-900 mb-2">
           No habits to track
@@ -55,13 +55,13 @@ export function TodayHabits({ habits, date }: TodayHabitsProps) {
   return (
     <div className="space-y-4">
       {/* Progress Header */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+      <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold text-gray-900">
+          <h2 className="font-semibold text-muted-foreground">
             Today's Progress
           </h2>
           <span className={`text-lg font-bold ${
-            allDone ? "text-green-600" : "text-gray-700"
+            allDone ? "text-green-600" : "text-muted-foreground"
           }`}>
             {completedCount}/{totalCount}
           </span>

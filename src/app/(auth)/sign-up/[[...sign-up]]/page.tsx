@@ -16,11 +16,14 @@ export default function SignUpPage() {
     <SignUp
       appearance={{
         elements: {
-          formButtonPrimary: 
-            "bg-indigo-600 hover:bg-indigo-700 text-sm normal-case",
-          card: "shadow-xl",
-          headerTitle: "text-2xl font-bold",
-          headerSubtitle: "text-gray-600",
+          card: "bg-card border border-border shadow-sm",
+          headerTitle: "text-foreground",
+          headerSubtitle: "text-muted-foreground",
+          socialButtonsBlockButton: "border-border bg-background text-foreground hover:bg-muted",
+          formFieldLabel: "text-foreground",
+          formFieldInput: "bg-background border-border text-foreground",
+          formButtonPrimary: "bg-primary text-primary-foreground hover:opacity-90",
+          footerActionLink: "text-primary hover:underline",
         },
       }}
     />

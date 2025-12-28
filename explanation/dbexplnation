@@ -1,0 +1,23 @@
+users
+Your app’s internal user record linked to Clerk.
+
+id: UUID (your DB ID)
+clerkId: Clerk user ID (string like user_xxx)
+email, name, imageUrl, timezone(in future we change it)
+billing fields:
+plan: "free" or "pro"
+stripeCustomerId: cus_... (optional)
+stripeSubscriptionId: sub_... (optional)
+////////////////////////////////////////////////////////////
+habits
+A habit definition (not the daily completion).
+
+belongs to: one user (userId)
+fields: name, category, frequency, targetFrequency, color, icon, isActive(use in delete)
+streak cache: currentStreak, longestStreak
+////////////////////////////////////////////////////////////
+habit_logs
+One habit’s activity for one day.
+belongs to: one habit (habitId)
+unique: (habitId, date) so you can’t create duplicates
+fields: date (YYYY-MM-DD), completed, completedCount, note

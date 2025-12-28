@@ -1,0 +1,83 @@
+These functions are used to render charts on /dashboard and /dashboard/analytics.
+
+:::::::::::::::::::::::::::::::::::::::::
+
+6.1 getOverallStats()
+Goal: top summary cards (habits count, done today, best streak, weekly rate).
+
+
+Output
+TypeScript
+
+{
+  totalHabits: number;//all habits in db
+  completedToday: number;//the complete today
+  totalToday: number;//all with complete and not
+  bestStreak: number;//best or max streak you have
+  totalCompletions: number;//all complete habits you have
+  weeklyCompletionRate: number;//.... for week
+  monthlyCompletionRate: number;//.... for month
+}
+
+UI usage
+StatsCards component (4 cards row)
+
+:::::::::::::::::::::::::::::::::::::::::::
+6.2 getDailyStats(days)
+Goal: bar chart data (one point per day).
+
+Input
+days: number (7 or 14)
+
+Output
+TypeScript
+
+{
+  date: string;
+  completed: number;
+  total: number;
+  percentage: number;
+}[]
+
+UI usage
+Weekly bar chart component
+
+::::::::::::::::::::::::::::::::::::::::::::::
+6.3 getHeatmapData(days)
+Goal: GitHub-like heatmap levels.
+
+Output
+TypeScript
+
+{ date: string; level: 0|1|2|3|4 }[]
+Logic
+Calculate completion percentage each day
+Convert percent to level
+
+UI usage
+Heatmap component in dashboard/analytics
+
+
+:::::::::::::::::::::::::::::::::::::::::::::
+
+
+6.4 getBestHabits(limit)
+Goal: show streak highlights (top habits).
+
+Output
+Habit[] sorted by streak
+
+UI usage
+StreakHighlights component.
+
+:::::::::::::::::::::::::::::::::::::::::::
+
+6.5 Pro gating analytics
+Your analytics page should enforce:
+
+If user not pro → redirect("/dashboard/upgrade")
+Correct check:
+
+TypeScript
+
+if (!user || user.plan !== "pro") redirect("/dashboard/upgrade")

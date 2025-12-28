@@ -1,0 +1,58 @@
+4.1 toggleHabitCompletion(habitId, date)
+Goal: one click toggles habit completion for that day.
+
+Input
+habitId: string
+date: string (YYYY-MM-DD). Default is today.
+
+Output
+ActionResponse (success message)
+
+Logic
+getOrCreateUser()
+Verify habit belongs to user
+Look for existing log for (habitId, date)
+If found:
+flip completed true↔false(flip)
+set completedCount to 1 or 0
+If not found:
+create a new log row with completed=true
+
+After changing logs:
+call streak recalculation (next section)
+Revalidate dashboard pages
+
+UI usage
+The check button on each habit row:
+CheckInButton calls this function when user clicks
+The habit row UI changes immediately (optimistic update), then server confirms
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+4.2 getHabitsWithStatus(date)
+Goal: show habits with “done/not done” state for a specific day.
+
+Input
+date: string (selected day)
+
+Output
+Array of habits with extra fields(focus in extra feilds):
+TypeScript
+
+Habit & {
+  isCompletedToday: boolean;
+  todayLog: HabitLog | null;
+}[]
+
+Logic
+Get all active habits for user
+Get all logs for that date
+Build a map: habitId -> log
+
+For each habit:
+isCompletedToday = log?.completed ?? false(Link between habits and logs for the input day so we know if habit is complete in that  day or not)
+
+UI usage
+/dashboard/page.tsx uses it to render the daily check-in list.
+HabitCheckInCard receives each habit + isCompletedToday
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::
