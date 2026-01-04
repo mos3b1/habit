@@ -26,17 +26,17 @@ export default async function BillingPage({
         </div>
       )}
 
-      <div className="rounded-2xl border bg-white p-8">
-        <h1 className="text-2xl font-bold text-slate-900">Billing</h1>
-        <p className="mt-2 text-slate-600">Your current subscription status.</p>
+      <div className="rounded-2xl border bg-card p-8">
+        <h1 className="text-2xl font-bold text-primary">Billing</h1>
+        <p className="mt-2 text-card-foreground">Your current subscription status.</p>
 
         <div className="mt-6 rounded-xl border p-6">
-          <p className="text-sm text-slate-600">Current plan</p>
-          <p className="mt-1 text-3xl font-bold text-slate-900">
+          <p className="text-sm text-card-foreground">Current plan</p>
+          <p className="mt-1 text-3xl font-bold text-card-foreground+20">
             {user.plan === "pro" ? "Pro" : "Free"}
           </p>
 
-          <div className="mt-4 text-sm text-slate-600">
+          <div className="mt-4 text-sm text-card-foreground">
             {user.plan === "pro" ? (
               <>
                 <p>✅ Unlimited habits unlocked</p>
@@ -50,7 +50,7 @@ export default async function BillingPage({
                 <p className="mt-4">
                   <Link
                     href="/dashboard/upgrade"
-                    className="inline-flex rounded-lg bg-teal-600 px-4 py-2 font-semibold text-white hover:bg-teal-700"
+                    className="inline-flex rounded-lg bg-primary px-4 py-2 font-semibold text-white hover:bg-teal-700"
                   >
                     Upgrade to Pro
                   </Link>
@@ -61,7 +61,7 @@ export default async function BillingPage({
         </div>
 
         <div className="mt-6">
-          <Link className="text-teal-700 hover:underline" href="/dashboard">
+          <Link className="text-primary hover:underline" href="/dashboard">
             ← Back to Dashboard
           </Link>
         </div>

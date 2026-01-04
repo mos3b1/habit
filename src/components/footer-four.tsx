@@ -1,59 +1,61 @@
-import { Logo } from '@/components/logo'
-import Link from 'next/link'
+import Link from "next/link";
+import { Logo } from "@/components/logo";
 
 const links = [
-    {
-        title: 'Features',
-        href: '#',
-    },
-    {
-        title: 'Solution',
-        href: '#',
-    },
-    {
-        title: 'Customers',
-        href: '#',
-    },
-    {
-        title: 'Pricing',
-        href: '#',
-    },
-    {
-        title: 'Help',
-        href: '#',
-    },
-    {
-        title: 'About',
-        href: '#',
-    },
-]
+  { title: "Features", href: "#Features" },
+  { title: "Pricing", href: "/pricing" },
+  { title: "Dashboard", href: "/dashboard" },
+  { title: "Billing", href: "/dashboard/billing" },
+  { title: "Privacy", href: "/privacy" },   // create later (optional)
+  { title: "Terms", href: "/terms" },       // create later (optional)
+];
 
 export default function FooterSection() {
-    return (
-        <footer className="bg-background border-b py-12">
-            <div className="mx-auto max-w-5xl px-6">
-                <div className="flex flex-wrap justify-between gap-12">
-                    <div className="order-last flex items-center gap-3 md:order-first">
-                        <Link
-                            href="#"
-                            aria-label="go home">
-                            <Logo />
-                        </Link>
-                        <span className="text-muted-foreground block text-center text-sm">© {new Date().getFullYear()} Tailark Mist, All rights reserved</span>
-                    </div>
+  return (
+    <footer className="border-t border-border bg-background">
+      <div className="container mx-auto max-w-6xl px-6 py-10">
+        <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+          {/* Brand + Copyright */}
+          <div className="flex items-center gap-3">
+            <Link href="/" aria-label="Go home" className="flex items-center gap-2">
+              <Logo href="/" size={24} showText={false} />
+            </Link>
 
-                    <div className="order-first flex flex-wrap gap-x-6 gap-y-4 md:order-last">
-                        {links.map((link, index) => (
-                            <Link
-                                key={index}
-                                href={link.href}
-                                className="text-muted-foreground hover:text-primary block duration-150">
-                                <span>{link.title}</span>
-                            </Link>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </footer>
-    )
+            <span className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} HabitFlow. All rights reserved.
+            </span>
+          </div>
+
+          {/* Links */}
+          <nav className="flex flex-wrap gap-x-6 gap-y-3">
+            {links.map((link) => (
+              <Link
+                key={link.title}
+                href={link.href}
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                {link.title}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        {/* Bottom line */}
+        <div className="mt-8 flex flex-col gap-2 border-t border-border pt-6 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
+          <p>
+            Built with Next.js, Drizzle, Neon, Clerk & Stripe.
+          </p>
+          <p>
+            Need help?{" "}
+            <a
+              className="text-primary hover:underline"
+              href="mailto:support@habitflow.app"
+            >
+              support@habitflow.app
+            </a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
 }

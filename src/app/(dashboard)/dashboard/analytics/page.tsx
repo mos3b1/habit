@@ -11,16 +11,16 @@ import {
 import { WeeklyChart } from "@/component/dashboard/weekly-chart";
 import { HabitHeatmap } from "@/component/dashboard/habit-heatmap";
 import { ProgressRing } from "@/component/dashboard/progress-ring";
-
+import { Button } from "@/components/ui/button";
 export default async function AnalyticsPage() {
   const user = await getOrCreateUser();
   if (!user) {
     redirect("/sign-in");
   }
 
-  if (user.plan !== "pro") {
-    redirect("/dashboard/upgrade");
-  }
+  // if (user.plan !== "pro") {
+  //   redirect("/dashboard/upgrade");
+  // }
 
   // Fetch data
   const [stats, dailyStats, heatmapData, habitsWithStats] = await Promise.all([
@@ -43,13 +43,19 @@ export default async function AnalyticsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-foreground font-bold tracking-tight text-3xl md:text-5xl">
-          Analytics
-        </h1>
-        <p className="text-muted-foreground">
-          Track your progress and identify patterns
-        </p>
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col">
+          <h1 className="text-foreground font-bold tracking-tight text-3xl md:text-5xl">
+            Analytics
+          </h1>
+          <p className="text-muted-foreground">
+            Track your progress and identify patterns
+          </p>
+        </div>
+
+        <Button asChild variant="outline" className="">
+          <a href="/api/export/csv">Export CSV</a>
+        </Button>
       </div>
 
       {/* Overview Stats */}

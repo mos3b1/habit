@@ -136,3 +136,23 @@ export function getDayOfWeek(dateString: string): number {
 export function getDayName(dateString: string): string {
   return parseDate(dateString).toLocaleDateString("en-US", { weekday: "short" });
 }
+
+
+// Get start and end of the week that contains dateString.
+// weekStartsOn = 1 → Monday, 0 → Sunday.
+export function getWeekRange(dateString: string, weekStartsOn: 0 | 1 = 1) {
+  const d = parseDate(dateString); // you already have parseDate()
+  const day = d.getDay(); // 0..6 (Sun..Sat)
+  const diffToStart = (day - weekStartsOn + 7) % 7;
+
+  const start = new Date(d);
+  start.setDate(d.getDate() - diffToStart);
+
+  const end = new Date(start);
+  end.setDate(start.getDate() + 6);
+
+  return {
+    start: formatDate(start), // "YYYY-MM-DD"
+    end: formatDate(end),
+  };
+}

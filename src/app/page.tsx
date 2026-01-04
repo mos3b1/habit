@@ -9,6 +9,7 @@ import ContentSection from "@/components/content-four";
 import FooterSection from "@/components/footer-four";
 import Features from "@/components/features-2";
 import { getOrCreateUser } from "@/lib/user";
+import Pricing from "@/components/pricing";
 /**
  * Landing Page
  * 
@@ -34,6 +35,8 @@ export default async function HomePage() {
       <HeroSection />
       
       <Features/>
+
+      <Pricing showbutton={false}/>
 
 
       

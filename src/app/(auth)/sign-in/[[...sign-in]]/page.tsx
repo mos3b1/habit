@@ -25,7 +25,6 @@ export default function SignInPage() {
           card: "bg-card border border-border shadow-sm",
           headerTitle: "text-foreground",
           headerSubtitle: "text-muted-foreground",
-          socialButtonsBlockButton: "border-border bg-background text-foreground hover:bg-muted",
           formFieldLabel: "text-foreground",
           formFieldInput: "bg-background border-border text-foreground",
           formButtonPrimary: "bg-primary text-primary-foreground hover:opacity-90",

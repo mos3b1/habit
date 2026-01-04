@@ -7,6 +7,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/component/theme-provider";
 import icon from "@/../public/ChatGPT_Image_21_déc._2025__17_16_10-removebg-preview.png";
 const inter = Inter({ subsets: ["latin"] });
+import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "sonner";
 /**
  * Metadata for SEO
@@ -38,8 +39,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
+          <NextTopLoader color="hsl(var(--primary))" showSpinner={false} />
           <ThemeProvider>{children}</ThemeProvider>
-          <Toaster richColors position="top-right" />
+          <Toaster  position="top-right" />
         </body>
       </html>
     </ClerkProvider>

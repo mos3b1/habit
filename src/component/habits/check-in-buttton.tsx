@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { toggleHabitCompletion } from "@/lib/actions/habits";
+import { toast } from "sonner";
 
 type CheckInButtonProps = {
   habitId: string;
@@ -34,7 +35,7 @@ export function CheckInButton({
       
       if (!result.success) {
         setIsCompleted(!newState);
-        console.error(result.message);
+        toast.error(result.message);
       }
     });
   }

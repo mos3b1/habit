@@ -5,6 +5,7 @@
 import { useFormStatus } from "react-dom";
 import { useState } from "react";
 import type { Habit } from "@/lib/db/schema";
+import { toast } from "sonner";
 
 type HabitFormProps = {
   habit?: Habit;
@@ -85,18 +86,20 @@ export function HabitForm({ habit, action, onSuccess }: HabitFormProps) {
 
     if (result.success) {
       setMessage(result.message);
+      toast.success(result.success);
       setErrors({});
       onSuccess?.();
     } else {
       setMessage(result.message);
+      toast.success(result.message);
       setErrors(result.errors || {});
     }
   }
 
   return (
-    <form action={handleSubmit} className="space-y-6">
+    <form action={handleSubmit} className="space-y-6 bg-card">
       {/* Success/Error Message */}
-      {message && (
+      {/* {message && (
         <div
           className={`p-4 rounded-lg ${
             errors && Object.keys(errors).length > 0
@@ -106,7 +109,7 @@ export function HabitForm({ habit, action, onSuccess }: HabitFormProps) {
         >
           {message}
         </div>
-      )}
+      )} */}
 
       {/* Habit Name */}
       <div>

@@ -18,7 +18,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { calculateCurrentStreak, calculateLongestStreak } from "@/lib/utils/streak";
 
-import { getTodayDate } from "@/lib/utils/date";
+import { getTodayDate, getWeekRange } from "@/lib/utils/date";
 
 
 // ============================================================
@@ -171,7 +171,7 @@ export async function createHabit(formData: FormData): Promise<ActionResponse> {
     };
 
   } catch (error) {
-    console.error("Error creating habit:", error);
+    
     return {
       success: false,
       message: "Something went wrong. Please try again.",
@@ -338,7 +338,7 @@ export async function updateHabit(
     };
 
   } catch (error) {
-    console.error("Error updating habit:", error);
+  
     return {
       success: false,
       message: "Something went wrong. Please try again.",
@@ -404,7 +404,7 @@ export async function deleteHabit(habitId: string): Promise<ActionResponse> {
     };
 
   } catch (error) {
-    console.error("Error deleting habit:", error);
+
     return {
       success: false,
       message: "Something went wrong. Please try again.",
@@ -457,7 +457,7 @@ export async function toggleHabitActive(habitId: string): Promise<ActionResponse
     };
 
   } catch (error) {
-    console.error("Error toggling habit:", error);
+    
     return { success: false, message: "Something went wrong" };
   }
 }
@@ -627,7 +627,7 @@ export async function toggleHabitCompletion(
     };
 
   } catch (error) {
-    console.error("Error toggling habit:", error);
+
     return { success: false, message: "Something went wrong" };
   }
 }
@@ -635,43 +635,79 @@ export async function toggleHabitCompletion(
 
 
 
-/**
- * Get habits with their completion status for a specific date
- */
+// Get habits + today status + weekly progress
 export async function getHabitsWithStatus(date: string = getTodayDate()) {
   const user = await getOrCreateUser();
+  if (!user) return [];
 
-  if (!user) {
-    return [];
+  // 1. Get all active habits for this user
+  const userHabits = await db.query.habits.findMany({
+    where: and(eq(habits.userId, user.id), eq(habits.isActive, true)),
+  });
+
+  if (userHabits.length === 0) return [];
+
+  const habitIds = userHabits.map((h) => h.id);
+  const habitIdSet = new Set(habitIds);
+
+  // 2. Today logs (for isCompletedToday)
+  const todayLogs = await db.query.habitLogs.findMany({
+    where: eq(habitLogs.date, date),
+  });
+
+  const todayLogMap = new Map<string, (typeof habitLogs.$inferSelect)>();
+  for (const log of todayLogs) {
+    if (habitIdSet.has(log.habitId)) {
+      todayLogMap.set(log.habitId, log);
+    }
   }
 
-  // Get all active habits
-  const userHabits = await db.query.habits.findMany({//find all habits
-    where: and(
-      eq(habits.userId, user.id),
-      eq(habits.isActive, true)
-    ),
-    orderBy: [desc(habits.createdAt)],
+  // 3. Weekly logs (only completed = true)
+  const { start: weekStart, end: weekEnd } = getWeekRange(date, 1); // Monday start
+
+  // We fetch ALL logs, then filter in JS. Simpler for now.
+  const allLogs = await db.query.habitLogs.findMany({
+    where: eq(habitLogs.completed, true),
   });
 
-  // Get logs for the specified date
-  const logs = await db.query.habitLogs.findMany({//get all logs
-    where: and(
-      eq(habitLogs.date, date),
-      // Only get logs for user's habits
-      // We filter after since Drizzle doesn't support complex subqueries easily
-    ),
+  const weeklyLogs = allLogs.filter(
+    (log) =>
+      habitIdSet.has(log.habitId) &&
+      log.date >= weekStart &&
+      log.date <= weekEnd
+  );
+
+  const weeklyCountMap = new Map<string, number>();
+  for (const log of weeklyLogs) {
+    weeklyCountMap.set(
+      log.habitId,
+      (weeklyCountMap.get(log.habitId) || 0) + 1
+    );
+  }
+
+  // 4. Combine everything into one array
+  const habitsWithStatus = userHabits.map((habit) => {
+    const todayLog = todayLogMap.get(habit.id) || null;
+    const isCompletedToday = !!todayLog?.completed;
+
+    const weeklyCompletedCount = weeklyCountMap.get(habit.id) || 0;
+    // For daily habits, weekly info is optional but still nice.
+    const weeklyTarget =
+      habit.frequency === "weekly" ? habit.targetFrequency : null;
+    const isWeekGoalMet =
+      habit.frequency === "weekly" && weeklyTarget
+        ? weeklyCompletedCount >= weeklyTarget
+        : null;
+
+    return {
+      ...habit,
+      isCompletedToday,
+      todayLog,
+      weeklyCompletedCount,
+      weeklyTarget,
+      isWeekGoalMet,
+    };
   });
-
-  // Create a map of habitId -> log for quick lookup
-  const logMap = new Map(logs.map(log => [log.habitId, log]));//is gona look like
-
-  // Combine habits with their status
-  const habitsWithStatus = userHabits.map(habit => ({
-    ...habit,
-    isCompletedToday: logMap.get(habit.id)?.completed || false,//tha map of logs
-    todayLog: logMap.get(habit.id) || null,
-  }));
 
   return habitsWithStatus;
 }
@@ -796,7 +832,7 @@ export async function addNoteToLog(
     return { success: true, message: "Note saved!" };
 
   } catch (error) {
-    console.error("Error adding note:", error);
+
     return { success: false, message: "Something went wrong" };
   }
 }
@@ -882,7 +918,7 @@ export async function recalculateAllStreaks(): Promise<ActionResponse> {
     };
 
   } catch (error) {
-    console.error("Error recalculating streaks:", error);
+
     return { success: false, message: "Something went wrong" };
   }
 }

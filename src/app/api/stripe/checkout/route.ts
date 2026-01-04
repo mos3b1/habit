@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
+
 export const runtime = "nodejs";
 
 export async function POST() {
@@ -61,7 +62,7 @@ export async function POST() {
 
     return NextResponse.json({ url: session.url }, { status: 200 });
   } catch (err: any) {
-    console.error("Stripe checkout route error:", err);
+   
     return NextResponse.json(
       { error: err?.message || "Failed to create checkout session" },
       { status: 500 }
