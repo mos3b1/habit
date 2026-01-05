@@ -32,6 +32,7 @@ const Button = ({
 // HeroVisual component from your HeroIcons.tsx
 export default function HeroVisual({ className }: { className?: string }) {
   const refIcon=useRef(null);
+  
   return (
     <div className={cn("relative mx-auto w-full max-w-[560px]", className)}>
       {/* Big background panel */}

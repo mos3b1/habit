@@ -1,3 +1,4 @@
+import { UpgradeButton } from "@/component/upgrade-button";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import Link from "next/link";
@@ -29,7 +30,7 @@ export default function Pricing({ showbutton }: boolean) {
               </div>
 
               <Button asChild variant="outline" className="w-full">
-                <Link href="">Get Started – Free forever</Link>
+                <Link href="/dashboard">Get Started – Free forever</Link>
               </Button>
 
               <hr className="border-dashed" />
@@ -63,9 +64,9 @@ export default function Pricing({ showbutton }: boolean) {
                 </div>
 
                 {showbutton && (
-                  <Button asChild className="w-full">
+                  <UpgradeButton asChild className="w-full">
                     <Link href="">Get Started</Link>
-                  </Button>
+                  </UpgradeButton>
                 )}
               </div>
 
