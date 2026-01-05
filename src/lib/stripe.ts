@@ -6,6 +6,6 @@ export function getStripe() {
   if (!key) throw new Error("Missing STRIPE_SECRET_KEY in .env.local");
 
   return new Stripe(key, {
-    apiVersion: "2025-01-27.clover" as any, // Using 'as any' to bypass specific beta version strictness if needed, or just set it.
+    apiVersion: "2025-12-15.clover",
   });
 }
