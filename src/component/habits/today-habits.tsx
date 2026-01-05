@@ -7,6 +7,9 @@ import type { Habit, HabitLog } from "@/lib/db/schema";
 type HabitWithStatus = Habit & {
   isCompletedToday: boolean;
   todayLog: HabitLog | null;
+  weeklyCompletedCount?: number;
+  weeklyTarget?: number | null;
+  isWeekGoalMet?: boolean | null;
 };
 
 type TodayHabitsProps = {
@@ -60,19 +63,17 @@ export function TodayHabits({ habits, date }: TodayHabitsProps) {
           <h2 className="font-semibold text-muted-foreground">
             Today's Progress
           </h2>
-          <span className={`text-lg font-bold ${
-            allDone ? "text-green-600" : "text-muted-foreground"
-          }`}>
+          <span className={`text-lg font-bold ${allDone ? "text-green-600" : "text-muted-foreground"
+            }`}>
             {completedCount}/{totalCount}
           </span>
         </div>
-        
+
         {/* Progress Bar */}
         <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
           <div
-            className={`h-full rounded-full transition-all duration-500 ease-out ${
-              allDone ? "bg-green-500" : "bg-indigo-500"
-            }`}
+            className={`h-full rounded-full transition-all duration-500 ease-out ${allDone ? "bg-green-500" : "bg-indigo-500"
+              }`}
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -90,9 +91,9 @@ export function TodayHabits({ habits, date }: TodayHabitsProps) {
       {/* Habits List */}
       <div className="space-y-3">
         {habits.map((habit) => (
-          <HabitCheckInCard 
-            key={habit.id} 
-            habit={habit} 
+          <HabitCheckInCard
+            key={habit.id}
+            habit={habit}
             date={date}
           />
         ))}

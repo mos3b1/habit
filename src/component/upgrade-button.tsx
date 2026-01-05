@@ -2,11 +2,24 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { Slot } from "@radix-ui/react-slot";
+import { cn } from "@/lib/utils";
 
-export function UpgradeButton() {
+interface UpgradeButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  asChild?: boolean;
+}
+
+export function UpgradeButton({
+  asChild,
+  className,
+  children,
+  ...props
+}: UpgradeButtonProps) {
   const [loading, setLoading] = useState(false);
 
-  const onUpgrade = async () => {
+  const onUpgrade = async (e?: React.MouseEvent) => {
+    e?.preventDefault();
     setLoading(true);
     try {
       const res = await fetch("/api/stripe/checkout", { method: "POST" });
@@ -37,13 +50,25 @@ export function UpgradeButton() {
     }
   };
 
+  const Comp = asChild ? Slot : "button";
+
   return (
-    <button
+    <Comp
       onClick={onUpgrade}
       disabled={loading}
-      className="w-full rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60 transition-colors"
+      className={cn(
+        "w-full rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60 transition-colors",
+        className
+      )}
+      {...props}
     >
-      {loading ? "Redirecting..." : "Upgrade to Pro"}
-    </button>
+      {asChild ? (
+        children
+      ) : (
+        <>
+          {children || (loading ? "Redirecting..." : "Upgrade to Pro")}
+        </>
+      )}
+    </Comp>
   );
 }

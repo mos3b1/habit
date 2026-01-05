@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import Link from "next/link";
 
-export default function Pricing({ showbutton }: boolean) {
+export default function Pricing({ showbutton }: { showbutton: boolean }) {
   return (
     <section className="py-16 md:py-32">
       <div className="mx-auto max-w-5xl px-6">

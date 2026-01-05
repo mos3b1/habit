@@ -7,6 +7,9 @@ type HabitWithStatus = Habit & {
   isCompletedToday: boolean;
   todayLog: HabitLog | null;
   logs?: HabitLog[];
+  weeklyCompletedCount?: number;
+  weeklyTarget?: number | null;
+  isWeekGoalMet?: boolean | null;
 };
 
 type HabitCheckInCardProps = {
@@ -25,10 +28,9 @@ export function HabitCheckInCard({
       className={`
         flex items-center justify-between p-4 rounded-xl
         transition-all duration-300
-        ${
-          habit.isCompletedToday
-            ? "bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900"
-            : "bg-card border border-border hover:border-muted-foreground"
+        ${habit.isCompletedToday
+          ? "bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900"
+          : "bg-card border border-border hover:border-muted-foreground"
         }
       `}
     >
@@ -51,11 +53,10 @@ export function HabitCheckInCard({
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
             <h3
-              className={`font-medium truncate transition-colors ${
-                habit.isCompletedToday
+              className={`font-medium truncate transition-colors ${habit.isCompletedToday
                   ? "text-green-700 dark:text-green-300"
                   : "text-foreground"
-              }`}
+                }`}
             >
               {habit.name}
               {habit.isCompletedToday && (
@@ -65,7 +66,7 @@ export function HabitCheckInCard({
               )}
             </h3>
           </div>
-          
+
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             {habit.frequency === "weekly" && habit.weeklyTarget ? (
               <span>
