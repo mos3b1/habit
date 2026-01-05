@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing sessionId" }, { status: 400 });
   }
 
+  const stripe = getStripe();
   const session = await stripe.checkout.sessions.retrieve(sessionId);
 
   // Basic checks
