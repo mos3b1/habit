@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { getOrCreateUser } from "@/lib/user";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
@@ -17,6 +17,7 @@ export default async function BillingSuccessPage({
   if (!session_id) redirect("/dashboard/billing?upgraded=false");
 
   // Retrieve session + expand subscription
+  const stripe = getStripe();
   const session = await stripe.checkout.sessions.retrieve(session_id, {
     expand: ["subscription"],
   });
