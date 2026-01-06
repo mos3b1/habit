@@ -10,6 +10,8 @@ import { db, habits, NewHabit, Habit } from '..';
 /**
  * Get all active habits for a user
  */
+
+//async alwayse return Promise
 export async function getUserHabits(userId: string): Promise<Habit[]> {
   return db
     .select()
@@ -17,7 +19,7 @@ export async function getUserHabits(userId: string): Promise<Habit[]> {
     .where(
       and(
         eq(habits.userId, userId),
-        eq(habits.isActive, true)
+        eq(habits.isActive, true)//only the active habits
       )
     )
     .orderBy(desc(habits.createdAt));
@@ -41,7 +43,7 @@ export async function getHabitById(
       )
     )
     .limit(1);
-  
+
   return result[0];
 }
 
@@ -53,7 +55,7 @@ export async function createHabit(habitData: NewHabit): Promise<Habit> {
     .insert(habits)
     .values(habitData)
     .returning();
-  
+
   return result[0];
 }
 
@@ -67,9 +69,9 @@ export async function updateHabit(
 ): Promise<Habit | undefined> {
   const result = await db
     .update(habits)
-    .set({ 
-      ...updates, 
-      updatedAt: new Date() 
+    .set({
+      ...updates,
+      updatedAt: new Date()
     })
     .where(
       and(
@@ -78,7 +80,7 @@ export async function updateHabit(
       )
     )
     .returning();
-  
+
   return result[0];
 }
 
@@ -91,9 +93,9 @@ export async function deleteHabit(
 ): Promise<void> {
   await db
     .update(habits)
-    .set({ 
-      isActive: false, 
-      updatedAt: new Date() 
+    .set({
+      isActive: false,
+      updatedAt: new Date()
     })
     .where(
       and(

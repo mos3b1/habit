@@ -23,7 +23,7 @@ export async function getHabitLogs(
     .where(
       and(
         eq(habitLogs.habitId, habitId),
-        between(habitLogs.date, startDate, endDate)
+        between(habitLogs.date, startDate, endDate)//the date of the habit log is between the start date and end date
       )
     )
     .orderBy(desc(habitLogs.date));
@@ -46,7 +46,7 @@ export async function getHabitLogForDate(
       )
     )
     .limit(1);
-  
+
   return result[0];
 }
 
@@ -65,7 +65,7 @@ export async function upsertHabitLog(
 ): Promise<HabitLog> {
   // Check if log exists
   const existingLog = await getHabitLogForDate(habitId, date);
-  
+
   if (existingLog) {
     // Update existing log
     const result = await db
@@ -78,10 +78,10 @@ export async function upsertHabitLog(
       })
       .where(eq(habitLogs.id, existingLog.id))
       .returning();
-    
+
     return result[0];
   }
-  
+
   // Create new log
   const result = await db
     .insert(habitLogs)
@@ -93,6 +93,6 @@ export async function upsertHabitLog(
       note,
     })
     .returning();
-  
+
   return result[0];
 }
