@@ -4,7 +4,7 @@ import logo from "../../public/brand/favicon.png"
 type LogoProps = {
   href?: string;
   size?: number;        // icon size
-  showText?: boolean;   // show “HabitFlow”
+  showText?: boolean;   // show "Habitly"
   className?: string;
   textClassName?: string;
   priority?: boolean;
@@ -27,7 +27,7 @@ export function Logo({
     <Link href={href} className={`flex items-center gap-2 ${className ?? ""}`}>
       <Image
         src={logo}
-        alt="HabitFlow logo"
+        alt="Habitly logo"
         width={size}
         height={size}
         priority={priority}
@@ -35,7 +35,7 @@ export function Logo({
 
       {showText && (
         <span className={`text-lg font-semibold tracking-tight text-foreground ${textClassName ?? ""}`}>
-          Habit<span className="text-primary">Flow</span>
+          Habit<span className="text-primary">ly</span>
         </span>
       )}
     </Link>

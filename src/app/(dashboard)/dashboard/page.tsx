@@ -62,7 +62,7 @@ export default async function DashboardPage({ searchParams }: Props) {
             <h1 className="text-2xl font-bold mb-1 text-foreground tracking-tight">
               Welcome back, {user.name?.split(" ")[0] || "there"}! 👋
             </h1>
-            <p className="text-muted-foreground">{formatDateDisplay(selectedDate)}</p>
+            <p className="text-foreground">{formatDateDisplay(selectedDate)}</p>
           </div>
 
           <Link

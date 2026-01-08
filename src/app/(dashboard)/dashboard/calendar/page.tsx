@@ -13,9 +13,9 @@ export default async function CalendarPage({
   const user = await getOrCreateUser();
 
   // PRO gate
-//   if (!user || user.plan !== "pro") {
-//     redirect("/dashboard/upgrade");
-//   }
+  if (!user || user.plan !== "pro") {
+    redirect("/dashboard/upgrade");
+  }
 
   const { date } = await searchParams;
   const selectedDate = date || getTodayDate();

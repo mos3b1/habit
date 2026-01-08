@@ -15,13 +15,13 @@ export default async function BillingPage({
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       {upgraded === "true" && (
-        <div className="rounded-xl border border-teal-200 bg-teal-50 p-4 text-teal-800">
+        <div className="rounded-xl border border-primary/20 bg-primary/10 p-4 text-primary">
           🎉 You are now Pro!
         </div>
       )}
 
       {upgraded === "false" && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-800">
+        <div className="rounded-xl border border-destructive/20 bg-destructive/10 p-4 text-destructive">
           Upgrade verification failed{reason ? ` (${reason})` : ""}. If you paid, contact support.
         </div>
       )}
@@ -50,7 +50,7 @@ export default async function BillingPage({
                 <p className="mt-4">
                   <Link
                     href="/dashboard/upgrade"
-                    className="inline-flex rounded-lg bg-primary px-4 py-2 font-semibold text-white hover:bg-teal-700"
+                    className="inline-flex rounded-lg bg-primary px-4 py-2 font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
                   >
                     Upgrade to Pro
                   </Link>

@@ -14,7 +14,7 @@ import { dark } from '@clerk/themes'
  * Metadata for SEO
  */
 export const metadata: Metadata = {
-  title: "Habit Tracker - Build Better Habits",
+  title: "Habitly - Build Better Habits",
   description: "Track your daily habits and build lasting routines",
   icons: {
     icon: "/favicon.ico",
@@ -41,7 +41,7 @@ export default function RootLayout({
       appearance={{
         baseTheme: dark, // Force dark mode to ensure consistency
         variables: {
-          colorPrimary: '#14b8a6',          // Brand teal
+          colorPrimary: '#10b981',          // Brand Green (Primary)
           colorBackground: '#0f172a',       // Fixed Dark Slate (matches your app card)
           colorInputBackground: '#1e293b',  // Fixed Darker Slate
           colorText: '#f8fafc',             // Fixed White text
@@ -52,11 +52,11 @@ export default function RootLayout({
           // Force Card to use the fixed variables, ignoring system theme
           card: 'bg-[#0f172a] border-[#1e293b]',
 
-          // Primary button - teal to purple gradient
+          // Primary button - Green to Blue gradient
           formButtonPrimary:
-            'bg-gradient-to-br from-primary to-accent hover:from-teal-600 hover:to-purple-600 ' +
+            'bg-gradient-to-br from-primary to-accent hover:from-primary/90 hover:to-accent/90 ' +
             'text-primary-foreground font-semibold transition-all duration-300 ' +
-            'shadow-lg shadow-primary/50 hover:shadow-xl hover:shadow-primary/60 ' +
+            'shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 ' +
             'hover:-translate-y-0.5 active:translate-y-0 border-0',
 
           // Input fields

@@ -18,9 +18,9 @@ export default async function AnalyticsPage() {
     redirect("/sign-in");
   }
 
-  // if (user.plan !== "pro") {
-  //   redirect("/dashboard/upgrade");
-  // }
+  if (user.plan !== "pro") {
+    redirect("/dashboard/upgrade");
+  }
 
   // Fetch data
   const [stats, dailyStats, heatmapData, habitsWithStats] = await Promise.all([
@@ -74,8 +74,8 @@ export default async function AnalyticsPage() {
               {safeStats.weeklyCompletionRate >= 80
                 ? "🔥 Excellent!"
                 : safeStats.weeklyCompletionRate >= 50
-                ? "👍 Good progress"
-                : "💪 Keep pushing!"}
+                  ? "👍 Good progress"
+                  : "💪 Keep pushing!"}
             </p>
           </div>
         </div>
@@ -156,9 +156,8 @@ export default async function AnalyticsPage() {
                   {habit.last30Days.slice(-14).map((completed, i) => (
                     <div
                       key={i}
-                      className={`w-3 h-3 rounded-sm ${
-                        completed ? "bg-green-500" : "bg-gray-200"
-                      }`}
+                      className={`w-3 h-3 rounded-sm ${completed ? "bg-green-500" : "bg-gray-200"
+                        }`}
                     />
                   ))}
                 </div>

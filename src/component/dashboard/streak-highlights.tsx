@@ -12,10 +12,10 @@ export function StreakHighlights({ habits }: StreakHighlightsProps) {
 
   // Sort by current streak
   const sortedByStreak = [...habits].sort((a, b) => b.currentStreak - a.currentStreak);
-  
+
   // Get top 3 streaks (only if > 0)
   const topStreaks = sortedByStreak.filter(h => h.currentStreak > 0).slice(0, 3);
-  
+
   // Get best ever
   const bestEver = [...habits].sort((a, b) => b.longestStreak - a.longestStreak)[0];
 
@@ -28,7 +28,7 @@ export function StreakHighlights({ habits }: StreakHighlightsProps) {
       {/* Current Hot Streaks */}
       {topStreaks.length > 0 && (
         <div className="bg-card rounded-xl p-6 border border-border">
-          <h3 className="text-sm font-medium text-orange-800 mb-4 flex items-center gap-2">
+          <h3 className="text-sm font-medium text-primary mb-4 flex items-center gap-2">
             🔥 Hot Streaks
           </h3>
           <div className="space-y-3">
@@ -51,8 +51,8 @@ export function StreakHighlights({ habits }: StreakHighlightsProps) {
                   <p className="font-medium text-muted-foreground truncate">{habit.name}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg font-bold text-orange-600">{habit.currentStreak}</p>
-                  <p className="text-xs text-orange-500">days</p>
+                  <p className="text-lg font-bold text-primary">{habit.currentStreak}</p>
+                  <p className="text-xs text-primary/80">days</p>
                 </div>
               </Link>
             ))}
@@ -63,7 +63,7 @@ export function StreakHighlights({ habits }: StreakHighlightsProps) {
       {/* Personal Best */}
       {bestEver && bestEver.longestStreak > 0 && (
         <div className="bg-card rounded-xl p-6 border border-border">
-          <h3 className="text-sm font-medium text-purple-800 mb-4 flex items-center gap-2">
+          <h3 className="text-sm font-medium text-accent mb-4 flex items-center gap-2">
             🏆 Personal Record
           </h3>
           <Link
@@ -78,11 +78,11 @@ export function StreakHighlights({ habits }: StreakHighlightsProps) {
             </div>
             <div className="flex-1">
               <p className="font-medium text-muted-foreground">{bestEver.name}</p>
-              <p className="text-sm text-purple-600">Longest streak ever</p>
+              <p className="text-sm text-accent">Longest streak ever</p>
             </div>
             <div className="text-right">
-              <p className="text-3xl font-bold text-purple-600">{bestEver.longestStreak}</p>
-              <p className="text-xs text-purple-500">days</p>
+              <p className="text-3xl font-bold text-accent">{bestEver.longestStreak}</p>
+              <p className="text-xs text-accent/80">days</p>
             </div>
           </Link>
         </div>

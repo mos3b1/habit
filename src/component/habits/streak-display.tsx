@@ -46,7 +46,7 @@ export function StreakDisplay({
 
   return (
     <div className="space-y-3">
-      <div className={`flex items-center gap-4 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-950/30 dark:to-red-950/30 rounded-xl ${classes.container} border border-orange-100 dark:border-orange-900`}>
+      <div className={`flex items-center gap-4 bg-accent/5 dark:bg-accent/10 rounded-xl ${classes.container} border border-border`}>
         <div className={`${classes.icon} ${currentStreak > 0 ? "animate-pulse" : ""}`}>
           {status.emoji}
         </div>
@@ -68,7 +68,7 @@ export function StreakDisplay({
         {longestStreak > 0 && (
           <div className="text-center bg-card rounded-lg px-3 py-2 border border-border">
             <p className="text-xs text-muted-foreground">Best</p>
-            <p className="font-bold text-purple-600 dark:text-purple-400">
+            <p className="font-bold text-primary">
               🏆 {longestStreak}
             </p>
           </div>
@@ -84,11 +84,11 @@ export function StreakDisplay({
   );
 }
 
-export function StreakBadge({ 
-  streak, 
-  showZero = false 
-}: { 
-  streak: number; 
+export function StreakBadge({
+  streak,
+  showZero = false
+}: {
+  streak: number;
   showZero?: boolean;
 }) {
   if (streak === 0 && !showZero) return null;
@@ -96,12 +96,12 @@ export function StreakBadge({
   const status = getStreakStatus(streak);
 
   return (
-    <span 
+    <span
       className={`
         inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium
-        ${streak === 0 
-          ? "bg-muted text-muted-foreground" 
-          : "bg-orange-100 dark:bg-orange-950/40 text-orange-700 dark:text-orange-300"
+        ${streak === 0
+          ? "bg-muted text-muted-foreground"
+          : "bg-primary/10 text-primary"
         }
       `}
     >
@@ -144,7 +144,7 @@ export function StreakProgressRing({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke={percentage >= 100 ? "#22c55e" : "#f97316"}
+          stroke="hsl(var(--primary))"
           strokeWidth={strokeWidth}
           fill="none"
           strokeLinecap="round"

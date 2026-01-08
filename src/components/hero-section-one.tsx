@@ -117,7 +117,7 @@ export default function HeroSection() {
               <div className="space-y-8 text-center lg:text-left">
                 <h1 className="hero-text invisible text-balance text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
                   Build habits that <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-violet-500">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
                     stick
                   </span>{" "}
                   forever.
@@ -130,7 +130,7 @@ export default function HeroSection() {
                 {/* CTAs */}
                 <div className="hero-text invisible flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                   <SignedOut>
-                    <Button asChild size="lg" className="rounded-full px-8 text-base shadow-lg shadow-teal-500/20 transition-all hover:shadow-teal-500/40 hover:-translate-y-1">
+                    <Button asChild size="lg" className="rounded-full px-8 text-base shadow-lg shadow-primary/25 transition-all hover:shadow-primary/40 hover:-translate-y-1">
                       <Link href="/sign-up">
                         Get Started Free <ChevronRight className="ml-2 h-4 w-4" />
                       </Link>

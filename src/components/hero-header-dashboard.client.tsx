@@ -11,7 +11,7 @@ import { Logo } from "@/components/logo";
 
 function ProBadge() {
   return (
-    <span className="ml-2 rounded-full bg-gradient-to-r from-teal-500 to-violet-500 px-2 py-0.5 text-[10px] font-semibold text-white">
+    <span className="ml-2 rounded-full bg-gradient-to-r from-primary to-accent px-2 py-0.5 text-[10px] font-semibold text-white">
       PRO
     </span>
   );
@@ -35,10 +35,10 @@ export function HeroHeaderDashboardClient({ isPro }: { isPro: boolean }) {
       // Free users go to upgrade instead of analytics
       href: isPro ? "/dashboard/analytics" : "/dashboard/upgrade",
       proOnly: true,
-    },{
-      name:"Celender",
-       href: isPro ? "/dashboard/calendar" : "/dashboard/upgrade",
-       proOnly: true,
+    }, {
+      name: "Celender",
+      href: isPro ? "/dashboard/calendar" : "/dashboard/upgrade",
+      proOnly: true,
     }
   ];
 

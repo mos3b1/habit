@@ -202,111 +202,114 @@
   --popover: #ffffff;
   --popover-foreground: #0f172a;
 
-  /* Brand */
-  --primary: #14b8a6;
-  /* teal-500 */
+  /* Brand - Growth & Success (Green + Blue) */
+  --primary: #10b981;
+  /* Emerald 500 - Growth/Success */
   --primary-foreground: #ffffff;
 
-  /* Secondary surfaces (soft purple) */
-  --secondary: #f5f3ff;
-  /* violet-50 */
-  --secondary-foreground: #4c1d95;
-  /* violet-900-ish */
+  /* Secondary surfaces */
+  --secondary: #ecfdf5;
+  /* Emerald 50 */
+  --secondary-foreground: #065f46;
+  /* Emerald 900 */
 
   --muted: #f1f5f9;
-  /* slate-100 */
+  /* Slate 100 */
   --muted-foreground: #64748b;
-  /* slate-500 */
+  /* Slate 500 */
 
-  /* Accent (purple) */
-  --accent: #8b5cf6;
-  /* violet-500 */
+  /* Accent - Trust & Stability */
+  --accent: #2563eb;
+  /* Blue 600 */
   --accent-foreground: #ffffff;
 
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
 
-  --border: #79ffd2;
-  /* slate-200 */
+  --border: #e2e8f0;
+  /* Slate 200 */
   --input: #e2e8f0;
-  --ring: #14b8a6;
+  --ring: #10b981;
 
-  /* Charts (teal/purple/cyan + warm colors) */
-  --chart-1: #14b8a6;
-  /* teal */
-  --chart-2: #8b5cf6;
-  /* violet */
+  /* Charts */
+  --chart-1: #10b981;
+  /* Emerald - Primary */
+  --chart-2: #2563eb;
+  /* Blue - Secondary */
   --chart-3: #06b6d4;
-  /* cyan */
-  --chart-4: #f59e0b;
-  /* amber */
-  --chart-5: #ef4444;
-  /* red */
+  /* Cyan */
+  --chart-4: #22c55e;
+  /* Green 500 */
+  --chart-5: #14b8a6;
+  /* Teal */
 
-  /* Sidebar (if you use shadcn sidebar components) */
+  /* Sidebar */
   --sidebar: #ffffff;
   --sidebar-foreground: #0f172a;
-  --sidebar-primary: #14b8a6;
+  --sidebar-primary: #10b981;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f5f3ff;
-  --sidebar-accent-foreground: #4c1d95;
+  --sidebar-accent: #ecfdf5;
+  --sidebar-accent-foreground: #065f46;
   --sidebar-border: #e2e8f0;
-  --sidebar-ring: #14b8a6;
+  --sidebar-ring: #10b981;
 
   /* Radius */
   --radius: 0.75rem;
 }
 
 .dark {
-  --background: #0b1220;
-  /* deep slate */
+  --background: #0b1120;
+  /* Deep Blue-Gray */
   --foreground: #f8fafc;
-  /* slate-50 */
 
-  --card: #0f172a;
+  --card: #111827;
+  /* Gray 900 */
   --card-foreground: #f8fafc;
 
-  --popover: #0f172a;
+  --popover: #111827;
   --popover-foreground: #f8fafc;
 
-  --primary: #2dd4bf;
-  /* teal-400 (brighter in dark) */
-  --primary-foreground: #042f2e;
-  /* teal-950 */
+  --primary: #22c55e;
+  /* Green 500 - Brighter for dark mode */
+  --primary-foreground: #ffffff;
 
   --secondary: #1e293b;
-  /* slate-800 */
+  /* Slate 800 */
   --secondary-foreground: #f8fafc;
 
   --muted: #1e293b;
-  --muted-foreground: #c1cfe4;
-  /* slate-400 */
+  --muted-foreground: #94a3b8;
 
-  --accent: #a78bfa;
-  /* violet-400 */
-  --accent-foreground: #0b1220;
+  --accent: #3b82f6;
+  /* Blue 500 */
+  --accent-foreground: #ffffff;
 
   --destructive: #f87171;
-  --destructive-foreground: #0b1220;
+  --destructive-foreground: #ffffff;
 
-  --border: rgba(255, 255, 255, 0.12);
-  --input: rgba(255, 255, 255, 0.16);
-  --ring: #2dd4bf;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: #22c55e;
 
-  --chart-1: #2dd4bf;
-  --chart-2: #a78bfa;
+  --chart-1: #22c55e;
+  /* Green */
+  --chart-2: #3b82f6;
+  /* Blue */
   --chart-3: #22d3ee;
-  --chart-4: #fbbf24;
-  --chart-5: #fb7185;
+  /* Cyan */
+  --chart-4: #34d399;
+  /* Emerald */
+  --chart-5: #14b8a6;
+  /* Teal */
 
   --sidebar: #0f172a;
   --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #2dd4bf;
-  --sidebar-primary-foreground: #042f2e;
+  --sidebar-primary: #22c55e;
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #1e293b;
   --sidebar-accent-foreground: #f8fafc;
-  --sidebar-border: rgba(255, 255, 255, 0.12);
-  --sidebar-ring: #2dd4bf;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #22c55e;
 
   --radius: 0.75rem;
 }
@@ -319,4 +322,103 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+
+.cl-footerAction {
+  background-color: transparent !important;
+}
+
+/* Auth Page Backgrounds */
+
+/* Option 1: Clean Gradient (BEST) */
+.auth-page-gradient {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #10b981 0%, #2563eb 100%);
+}
+
+/* Option 2: Gradient with Mesh Pattern */
+.auth-page-mesh {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.3) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(37, 99, 235, 0.3) 0px, transparent 50%),
+    linear-gradient(135deg, #10b981 0%, #2563eb 100%);
+}
+
+/* Option 3: Animated Blobs (You already have animation!) */
+.auth-page-blobs {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #10b981 0%, #2563eb 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-page-blobs::before,
+.auth-page-blobs::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+}
+
+.auth-page-blobs::before {
+  background: #22c55e;
+  top: -200px;
+  left: -200px;
+  animation: blob 7s infinite;
+}
+
+.auth-page-blobs::after {
+  background: #3b82f6;
+  bottom: -200px;
+  right: -200px;
+  animation: blob 7s infinite;
+  animation-delay: 2s;
+}
+
+/* Option 4: Subtle Dot Pattern */
+.auth-page-dots {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #10b981;
+  background-image:
+    radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.1) 2%, transparent 0%),
+    radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.1) 2%, transparent 0%);
+  background-size: 100px 100px;
+  background-position: 0 0, 50px 50px;
+}
+
+/* White Card for Form - Use with any background */
+.auth-card {
+  background: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Dark Mode Versions */
+.dark .auth-page-gradient {
+  background: linear-gradient(135deg, #065f46 0%, #1e40af 100%);
+}
+
+.dark .auth-card {
+  background: #111827;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
