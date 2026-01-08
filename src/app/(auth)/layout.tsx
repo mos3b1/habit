@@ -20,15 +20,14 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       {/* 3. Centered Auth Card */}
-      <div className=" relative z-10 flex flex-col items-center">
-        <div className="flex flex-col items-center space-y-2 mb-8 text-center">
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white hidden lg:block">
-            Welcome back
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 hidden lg:block">
-            Enter your details to access your account
-          </p>
-        </div>
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center">        <div className="flex flex-col items-center space-y-2 mb-8 text-center">
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white hidden lg:block">
+          Welcome back
+        </h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 hidden lg:block">
+          Enter your details to access your account
+        </p>
+      </div>
 
         {children}
       </div>

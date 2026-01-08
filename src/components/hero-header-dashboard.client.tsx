@@ -36,8 +36,7 @@ export function HeroHeaderDashboardClient({ isPro }: { isPro: boolean }) {
       href: isPro ? "/dashboard/analytics" : "/dashboard/upgrade",
       proOnly: true,
     }, {
-      name: "Celender",
-      href: isPro ? "/dashboard/calendar" : "/dashboard/upgrade",
+      name: "Calendar", href: isPro ? "/dashboard/calendar" : "/dashboard/upgrade",
       proOnly: true,
     }
   ];
