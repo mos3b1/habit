@@ -65,7 +65,7 @@ export default function Pricing({ showbutton }: { showbutton: boolean }) {
 
                 {showbutton && (
                   <UpgradeButton asChild className="w-full">
-                    <Link href="#">Get Started</Link>
+                    <Link href="/upgrade">Get Started</Link>
                   </UpgradeButton>
                 )}
               </div>

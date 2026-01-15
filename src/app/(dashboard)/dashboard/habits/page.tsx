@@ -49,13 +49,11 @@ export default async function HabitsPage() {
       {/* Habits Grid */}
       {habits.length === 0 ? (
         // Empty State
-        <div className="bg-card rounded-2xl p-12 text-center border-border">
-          <div className="text-6xl mb-4">🌱</div>
+        <div className="bg-card rounded-2xl p-12 text-center border border-border">          <div className="text-6xl mb-4">🌱</div>
           <h2 className="text-xl font-semibold text-foreground mb-2">
             No habits yet
           </h2>
-          <p className="text-foreground-50 mb-6 max-w-md mx-auto">
-            Start building better habits today. Create your first habit and
+          <p className="text-foreground/50 mb-6 max-w-md mx-auto">            Start building better habits today. Create your first habit and
             begin your journey!
           </p>
           <Link

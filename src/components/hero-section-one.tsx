@@ -138,7 +138,7 @@ export default function HeroSection() {
                   </SignedOut>
 
                   <Button asChild size="lg" variant="outline" className="rounded-full px-8">
-                    <Link href="dashboard/upgrade">View Pricing</Link>
+                    <Link href="/dashboard/upgrade">View Pricing</Link>
                   </Button>
                 </div>
 

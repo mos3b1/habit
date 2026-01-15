@@ -22,14 +22,12 @@ export function DeleteHabitButton({ habitId, habitName }: DeleteHabitButtonProps
 
     if (result.success) {
 
-      toast.error(result.message);
+      toast.success(result.message);
       setShowModal(false);
       router.refresh();
     } else {
       toast.error(result.message);
-    }
-
-    setIsDeleting(false);
+    } setIsDeleting(false);
   }
 
   return (

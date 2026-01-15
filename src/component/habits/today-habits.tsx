@@ -36,10 +36,9 @@ export function TodayHabits({ habits, date }: TodayHabitsProps) {
         <h2 className="text-xl font-semibold text-foreground mb-2">
           No habits to track
         </h2>
-        <p className="text-foreground-50 mb-6">
+        <p className="text-foreground/50 mb-6">
           Create your first habit to start your journey!
-        </p>
-        <Link
+        </p>        <Link
           href="/dashboard/habits/new"
           className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl hover:bg-primary/80 transition-colors"
         >
