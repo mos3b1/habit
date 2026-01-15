@@ -29,43 +29,40 @@ export async function POST(req: NextRequest) {
         const subscription = await stripe.subscriptions.retrieve(
             session.subscription as string
         );
-        if (event.type === "checkout.session.completed") {
-            const subscription = await stripe.subscriptions.retrieve(
-                session.subscription as string
-            );
 
-            const dbUserId = session.metadata?.dbUserId;
+        const dbUserId = session.metadata?.dbUserId;
 
-            if (!dbUserId) {
-                console.error("checkout.session.completed: Missing dbUserId in session metadata", {
-                    sessionId: session.id,
-                    customerId: session.customer,
-                });
-                return NextResponse.json({ error: "Missing dbUserId in metadata" }, { status: 400 });
-            }
-
-            await db
-                .update(users)
-                .set({
-                    plan: "pro",
-                    stripeCustomerId: session.customer as string,
-                    stripeSubscriptionId: subscription.id,
-                    updatedAt: new Date(),
-                })
-                .where(eq(users.id, dbUserId));
+        if (!dbUserId) {
+            console.error("checkout.session.completed: Missing dbUserId in session metadata", {
+                sessionId: session.id,
+                customerId: session.customer,
+            });
+            return NextResponse.json({ error: "Missing dbUserId in metadata" }, { status: 400 });
         }
 
-        if (event.type === "customer.subscription.deleted") {
-            const subscription = event.data.object as Stripe.Subscription;
-
-            await db
-                .update(users)
-                .set({
-                    plan: "free",
-                    updatedAt: new Date(),
-                })
-                .where(eq(users.stripeSubscriptionId, subscription.id));
-        }
-
-        return NextResponse.json({ received: true });
+        await db
+            .update(users)
+            .set({
+                plan: "pro",
+                stripeCustomerId: session.customer as string,
+                stripeSubscriptionId: subscription.id,
+                updatedAt: new Date(),
+            })
+            .where(eq(users.id, dbUserId));
     }
+
+    if (event.type === "customer.subscription.deleted") {
+        const subscription = event.data.object as Stripe.Subscription;
+
+        await db
+            .update(users)
+            .set({
+                plan: "free",
+                updatedAt: new Date(),
+            })
+            .where(eq(users.stripeSubscriptionId, subscription.id));
+    }
+
+    return NextResponse.json({ received: true });
+
+}
