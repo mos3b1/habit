@@ -3,11 +3,11 @@ import { Logo } from "@/components/logo";
 
 const links = [
   { title: "Features", href: "#Features" },
-  { title: "Pricing", href: "/pricing" },
+  { title: "Pricing", href: "/dashboard/upgrade" },
   { title: "Dashboard", href: "/dashboard" },
   { title: "Billing", href: "/dashboard/billing" },
-  { title: "Privacy", href: "/privacy" },   // create later (optional)
-  { title: "Terms", href: "/terms" },       // create later (optional)
+  // { title: "Privacy", href: "/privacy" },   // create later (optional)
+  // { title: "Terms", href: "/terms" },       // create later (optional)
 ];
 
 export default function FooterSection() {
@@ -17,9 +17,7 @@ export default function FooterSection() {
         <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
           {/* Brand + Copyright */}
           <div className="flex items-center gap-3">
-            <Link href="/" aria-label="Go home" className="flex items-center gap-2">
-              <Logo href="/" size={24} showText={false} />
-            </Link>
+            <Logo href="/" size={24} showText={false} ariaLabel="Go home" />
 
             <span className="text-sm text-muted-foreground">
               © {new Date().getFullYear()} HabitFlow. All rights reserved.
@@ -49,9 +47,9 @@ export default function FooterSection() {
             Need help?{" "}
             <a
               className="text-primary hover:underline"
-              href="mailto:support@habitflow.app"
+              href="mailto:mossaab.bensalhai@univ-constantine2.dz"
             >
-              support@habitflow.app
+              mossaab.bensalhai@univ-constantine2.dz
             </a>
           </p>
         </div>

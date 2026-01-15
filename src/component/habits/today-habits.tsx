@@ -31,17 +31,17 @@ export function TodayHabits({ habits, date }: TodayHabitsProps) {
   // Empty state
   if (habits.length === 0) {
     return (
-      <div className="bg-card rounded-2xl p-8 shadow-sm border border-gray-100 text-center">
+      <div className="bg-card rounded-2xl p-8 shadow-sm border border-border text-center">
         <div className="text-6xl mb-4">🌱</div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">
+        <h2 className="text-xl font-semibold text-foreground mb-2">
           No habits to track
         </h2>
-        <p className="text-gray-500 mb-6">
+        <p className="text-foreground-50 mb-6">
           Create your first habit to start your journey!
         </p>
         <Link
           href="/dashboard/habits/new"
-          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 transition-colors"
+          className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl hover:bg-primary/80 transition-colors"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -60,17 +60,17 @@ export function TodayHabits({ habits, date }: TodayHabitsProps) {
       {/* Progress Header */}
       <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold text-muted-foreground">
+          <h2 className="font-semibold text-foreground">
             Today's Progress
           </h2>
-          <span className={`text-lg font-bold ${allDone ? "text-green-600" : "text-muted-foreground"
+          <span className={`text-lg font-bold ${allDone ? "text-green-600" : "text-foreground"
             }`}>
             {completedCount}/{totalCount}
           </span>
         </div>
 
         {/* Progress Bar */}
-        <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+        <div className="h-3 bg-border rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full transition-all duration-500 ease-out ${allDone ? "bg-green-500" : "bg-indigo-500"
               }`}

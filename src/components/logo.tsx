@@ -8,6 +8,7 @@ type LogoProps = {
   className?: string;
   textClassName?: string;
   priority?: boolean;
+  ariaLabel?: string;
 };
 
 /**
@@ -17,14 +18,19 @@ type LogoProps = {
  */
 export function Logo({
   href = "/",
-  size = 28,
+  size = 60,
   showText = true,
   className,
   textClassName,
   priority = false,
+  ariaLabel,
 }: LogoProps) {
   return (
-    <Link href={href} className={`flex items-center gap-2 ${className ?? ""}`}>
+    <Link
+      href={href}
+      className={`flex items-center gap-2 ${className ?? ""}`}
+      aria-label={ariaLabel}
+    >
       <Image
         src={logo}
         alt="Habitly logo"

@@ -15,7 +15,7 @@ import { getOrCreateUser } from "@/lib/user";
  */
 export default async function HabitsPage() {
   const habits = await getHabits(); //fetch all habits for the user
-  
+
 
   return (
     <div className="space-y-6">
@@ -49,18 +49,18 @@ export default async function HabitsPage() {
       {/* Habits Grid */}
       {habits.length === 0 ? (
         // Empty State
-        <div className="bg-white rounded-2xl p-12 text-center">
+        <div className="bg-card rounded-2xl p-12 text-center border-border">
           <div className="text-6xl mb-4">🌱</div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          <h2 className="text-xl font-semibold text-foreground mb-2">
             No habits yet
           </h2>
-          <p className="text-gray-500 mb-6 max-w-md mx-auto">
+          <p className="text-foreground-50 mb-6 max-w-md mx-auto">
             Start building better habits today. Create your first habit and
             begin your journey!
           </p>
           <Link
             href="/dashboard/habits/new"
-            className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 transition-colors"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl hover:bg-primary/80 transition-colors"
           >
             <svg
               className="w-5 h-5"
@@ -114,7 +114,7 @@ export default async function HabitsPage() {
         </div>
       )}
 
-     
+
     </div>
   );
 }

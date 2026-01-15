@@ -60,12 +60,12 @@ export default function Pricing({ showbutton }: { showbutton: boolean }) {
                   <span className="my-3 block text-2xl font-semibold">
                     $2 / month
                   </span>
-                  <p className="text-muted-foreground text-sm">Per editor</p>
+                  <p className="text-muted-foreground text-sm">Unlock unlimited habits and analytics.</p>
                 </div>
 
                 {showbutton && (
                   <UpgradeButton asChild className="w-full">
-                    <Link href="">Get Started</Link>
+                    <Link href="#">Get Started</Link>
                   </UpgradeButton>
                 )}
               </div>

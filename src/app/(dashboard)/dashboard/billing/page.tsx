@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getOrCreateUser } from "@/lib/user";
+import { ManageSubscriptionButton } from "@/component/manage-subscription-button";
 
 export default async function BillingPage({
   searchParams,
@@ -32,7 +33,7 @@ export default async function BillingPage({
 
         <div className="mt-6 rounded-xl border p-6">
           <p className="text-sm text-card-foreground">Current plan</p>
-          <p className="mt-1 text-3xl font-bold text-card-foreground+20">
+          <p className="mt-1 text-3xl font-bold text-primary">
             {user.plan === "pro" ? "Pro" : "Free"}
           </p>
 
@@ -40,9 +41,9 @@ export default async function BillingPage({
             {user.plan === "pro" ? (
               <>
                 <p>✅ Unlimited habits unlocked</p>
-                <p className="mt-2 text-slate-500">
-                  (Later we can add a “Manage subscription” portal.)
-                </p>
+                <div className="mt-6 pt-4 border-t">
+                  <ManageSubscriptionButton />
+                </div>
               </>
             ) : (
               <>

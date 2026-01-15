@@ -1,68 +1,54 @@
 "use client";
+
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/component/theme-toggle";
 
 const menuItems = [
-  { name: "Features", href: "#link" },
-  { name: "Solution", href: "#link" },
-  { name: "Pricing", href: "#link" },
-  { name: "About", href: "#link" },
+  { name: "Features", href: "#Features" },
+  { name: "Pricing", href: "/dashboard/upgrade" },
+  { name: "Dashboard", href: "/dashboard" },
 ];
 
 export const HeroHeader = () => {
-  const [menuState, setMenuState] = React.useState(false);
-  const [scrolled, setScrolled] = React.useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    onScroll();
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <header>
       <nav
-        data-state={menuState && "active"}
         className={cn(
-          "fixed z-20 w-full border-b transition-colors duration-150",
-          scrolled && "bg-background/50 backdrop-blur-3xl"
+          "fixed z-30 w-full transition-all duration-300",
+          isScrolled || menuOpen
+            ? "bg-background/80 border-b border-border backdrop-blur-xl"
+            : "bg-transparent border-transparent"
         )}
       >
-        <div className="mx-auto max-w-5xl px-6 transition-all duration-300">
-          <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
-            <div className="flex w-full items-center justify-between gap-12 lg:w-auto">
-              <Link
-                href="/"
-                aria-label="home"
-                className="flex items-center space-x-2"
-              >
-                <Logo />
-              </Link>
-
-              <button
-                onClick={() => setMenuState(!menuState)}
-                aria-label={menuState == true ? "Close Menu" : "Open Menu"}
-                className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden"
-              >
-                <Menu className="in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 m-auto size-6 duration-200" />
-                <X className="in-data-[state=active]:rotate-0 in-data-[state=active]:scale-100 in-data-[state=active]:opacity-100 absolute inset-0 m-auto size-6 -rotate-180 scale-0 opacity-0 duration-200" />
-              </button>
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="flex items-center justify-between py-3 lg:py-4">
+            {/* Logo and Desktop Nav */}
+            <div className="flex items-center gap-12">
+              <Logo size={60} ariaLabel="home" />
 
               <div className="hidden lg:block">
-                <ul className="flex gap-8 text-sm">
+                <ul className="flex gap-8 text-sm font-medium">
                   {menuItems.map((item, index) => (
                     <li key={index}>
                       <Link
                         href={item.href}
-                        className="text-muted-foreground hover:text-primary block duration-150"
+                        className="text-muted-foreground hover:text-primary transition-colors"
                       >
-                        <span>{item.name}</span>
+                        {item.name}
                       </Link>
                     </li>
                   ))}
@@ -70,33 +56,75 @@ export const HeroHeader = () => {
               </div>
             </div>
 
-            <div className="bg-background in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
-              <div className="lg:hidden">
-                <ul className="space-y-6 text-base">
-                  {menuItems.map((item, index) => (
-                    <li key={index}>
-                      <Link
-                        href={item.href}
-                        className="text-muted-foreground hover:text-primary block duration-150"
-                      >
-                        <span>{item.name}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+            {/* Desktop Actions */}
+            <div className="hidden lg:flex items-center gap-4">
+              <ThemeToggle />
+              <Button asChild variant="ghost" size="sm" className="font-medium">
+                <Link href="/sign-in">Login</Link>
+              </Button>
+              <Button asChild size="sm" className="font-medium px-6 rounded-full">
+                <Link href="/sign-up">Sign Up</Link>
+              </Button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? "Close Menu" : "Open Menu"}
+              className="lg:hidden relative z-50 p-2 -mr-2 text-foreground hover:bg-muted rounded-full transition-colors"
+            >
+              <div className="relative size-6">
+                <Menu
+                  className={cn(
+                    "absolute inset-0 transition-all duration-300",
+                    menuOpen ? "rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100"
+                  )}
+                />
+                <X
+                  className={cn(
+                    "absolute inset-0 transition-all duration-300",
+                    menuOpen ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0"
+                  )}
+                />
               </div>
-              <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                <ThemeToggle/>
-                <Button asChild variant="outline" size="sm">
-                  <Link href="/sign-in">
-                    <span>Login</span>
-                  </Link>
-                </Button>
-                <Button asChild size="sm">
-                  <Link href="/sign-up">
-                    <span>Sign Up</span>
-                  </Link>
-                </Button>
+            </button>
+          </div>
+
+          {/* Mobile Menu Dropdown */}
+          <div
+            className={cn(
+              "lg:hidden overflow-hidden transition-all duration-500 ease-in-out",
+              menuOpen ? "max-h-[500px] opacity-100 pb-8" : "max-h-0 opacity-0"
+            )}
+          >
+            <div className="pt-4 space-y-6">
+              <ul className="space-y-4">
+                {menuItems.map((item, index) => (
+                  <li key={index}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setMenuOpen(false)}
+                      className="text-lg font-medium text-foreground hover:text-primary transition-colors block px-2 py-1"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="pt-6 border-t border-border flex flex-col gap-4">
+                <div className="flex items-center justify-between px-2">
+                  <span className="text-sm font-medium text-muted-foreground">Appearance</span>
+                  <ThemeToggle />
+                </div>
+                <div className="grid grid-cols-2 gap-3 mt-2">
+                  <Button asChild variant="outline" className="w-full rounded-xl">
+                    <Link href="/sign-in" onClick={() => setMenuOpen(false)}>Login</Link>
+                  </Button>
+                  <Button asChild className="w-full rounded-xl">
+                    <Link href="/sign-up" onClick={() => setMenuOpen(false)}>Sign Up</Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

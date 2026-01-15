@@ -17,18 +17,18 @@ export function DeleteHabitButton({ habitId, habitName }: DeleteHabitButtonProps
 
   async function handleDelete() {
     setIsDeleting(true);
-    
+
     const result = await deleteHabit(habitId);
-    
+
     if (result.success) {
-     
-      toast.success(result.message);
+
+      toast.error(result.message);
       setShowModal(false);
       router.refresh();
     } else {
       toast.error(result.message);
     }
-    
+
     setIsDeleting(false);
   }
 
@@ -46,20 +46,20 @@ export function DeleteHabitButton({ habitId, habitName }: DeleteHabitButtonProps
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div 
+          <div
             className="absolute inset-0 bg-black/50"
             onClick={() => setShowModal(false)}
           />
-          
+
           <div className="relative bg-card rounded-2xl p-6 max-w-md w-full mx-4 shadow-xl border border-border">
             <h3 className="text-lg font-semibold text-foreground mb-2">
               Delete Habit?
             </h3>
             <p className="text-muted-foreground mb-6">
-              Are you sure you want to delete <strong>"{habitName}"</strong>? 
+              Are you sure you want to delete <strong>"{habitName}"</strong>?
               This habit will be archived and can be restored later.
             </p>
-            
+
             <div className="flex gap-3">
               <button
                 onClick={() => setShowModal(false)}

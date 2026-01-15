@@ -21,61 +21,40 @@ export default async function UpgradePage({
   }
 
   return (
+    <div className="mx-auto max-w-4xl space-y-10 py-10">
+      {canceled === "true" && (
+        <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-yellow-800 animate-slide-in">
+          Payment canceled. You can try again anytime.
+        </div>
+      )}
 
-    <Pricing showbutton={true}/>
-  )
+      <div className="space-y-4 text-center">
+        <h1 className="text-4xl font-bold font-heading">Upgrade your potential</h1>
+        <p className="text-muted-foreground max-w-lg mx-auto">
+          Choose the plan that fits your growth. Move from basic tracking to full optimization.
+        </p>
+      </div>
 
-  //   <div className="mx-auto max-w-2xl space-y-6">
-  //     {canceled === "true" && (
-  //       <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-yellow-800">
-  //         Payment canceled. You can try again anytime.
-  //       </div>
-  //     )}
-  //      <Pricing showbutton={true}/>
+      <Pricing showbutton={true} />
 
-  //     <div className="rounded-2xl border-border bg-card p-8">
-  //       <h1 className="text-2xl font-bold text-card-foreground">Upgrade to Pro</h1>
-  //       <p className="mt-2 text-card-foreground">
-  //         Unlock unlimited habits and premium analytics.
-  //       </p>
+      <div className="rounded-2xl border bg-card p-6 flex items-center justify-between">
+        <div>
+          <p className="text-sm font-medium text-muted-foreground">Current plan</p>
+          <p className="text-xl font-bold text-primary capitalize">{user.plan}</p>
+        </div>
+        <Link
+          className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
+          href="/dashboard/billing"
+        >
+          View Billing History <ArrowRightIcon className="size-4" />
+        </Link>
+      </div>
 
-  //       <div className="mt-6 rounded-xl border p-6">
-  //         <div className="flex items-end justify-between">
-  //           <div>
-  //             <p className="text-sm font-medium text-card-foreground">Habit Tracker Pro</p>
-  //             <p className="mt-1 text-4xl font-bold text-card-foreground">$2</p>
-  //             <p className="text-card-foreground">per month</p>
-  //           </div>
-  //           <div className="rounded-full bg-foreground px-3 py-1 text-sm font-semibold text-primary">
-  //             Most Popular
-  //           </div>
-  //         </div>
-
-  //         <ul className="mt-6 space-y-2 text-card-foreground">
-  //           <li>✅ Unlimited habits</li>
-  //           <li>✅ Advanced analytics</li>
-  //           <li>✅ Full history & heatmap</li>
-  //         </ul>
-
-  //         <div className="mt-6">
-  //           <UpgradeButton />
-  //         </div>
-
-  //         <p className="mt-4 text-xs text-primary flex items-center justify-center gap-2.5 hover:curser-pointer">
-  //           Cancel anytime.
-           
-  //         </p>
-  //       </div>
-
-  //       <div className="mt-6 text-sm text-card-foreground">
-  //         <p>
-  //           Current plan: <span className="font-semibold text-primary">Free</span> (3 habits max)
-  //         </p>
-  //         <Link className="text-primary hover:underline" href="/dashboard/billing">
-  //           Go to Billing →
-  //         </Link>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
+      <div className="flex justify-center">
+        <Link href="/dashboard" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowBigLeftIcon className="size-4" /> Back to Dashboard
+        </Link>
+      </div>
+    </div>
+  );
 }
